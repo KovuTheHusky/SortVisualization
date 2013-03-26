@@ -1,19 +1,16 @@
 import java.util.ArrayList;
 import java.util.concurrent.Semaphore;
-
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.FloatControl;
 import javax.sound.sampled.SourceDataLine;
-
 import processing.core.*;
 
+@SuppressWarnings("serial")
 public class SortVisualization extends PApplet {
 	
 	private boolean playBoth = true;
-	
-	private final int SLEEP = 1;
-	
+		
 	private final int ARRAY_LENGTH = 50;
 	private final int WIDTH = 1000;
 	private final int HEIGHT = 1000;
@@ -22,55 +19,42 @@ public class SortVisualization extends PApplet {
 	private final int BAR_WIDTH = WIDTH / ARRAY_LENGTH - 1;
 	private final int SOUND_LENGTH = 10;
 	
-	private int[] array = new int[ARRAY_LENGTH];
+	private Number[] array = new Number[ARRAY_LENGTH];
 	private boolean running = false;
-	private int cur1 = -1, cur2 = -1, cur3 = -1, cur4 = -1, cur5 = -1;
+	private int cur1 = -1, cur2 = -1, cur4 = -1, cur5 = -1;
+	
+	private ArrayList<Integer> highlighted = new ArrayList<Integer>();
+	private ArrayList<Integer> toHighlight = new ArrayList<Integer>();
+	
 	Semaphore semaphore = new Semaphore(1);
-
-	private static final int sampleRate = 44000;
-	private static final AudioFormat af = new AudioFormat(sampleRate, 16, 1, true, true);
-	public static SourceDataLine line;
+	AudioEngine ae = new AudioEngine();
 	
 	long startTime;
 	long endTime = 0;
 	
 	long secondCount = 0;
 	double fps = 0;
+	long lastFpsOut = 0;
+	
+	private boolean firstFrame = true;
 
 	public void setup() {
 		size(WIDTH, HEIGHT);
-		//background(255);
-		//stroke(0);
-		//fill(0);
-		for (int i = 0; i < array.length; ++i) {
-			array[i] = (int)random(MIN, MAX);
-			//rect(i * BAR_WIDTH, HEIGHT - array[i], BAR_WIDTH, array[i]);
-		}
-		final AudioFormat af = new AudioFormat(sampleRate, 16, 1, true, true);
-        try {
-            line = AudioSystem.getSourceDataLine(af);
-            line.open(af);
-            line.start();
-            FloatControl gainControl = (FloatControl)line.getControl(FloatControl.Type.MASTER_GAIN);
-            gainControl.setValue(-20.0f);
-            //line.drain();
-            //line.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+		stroke(255);
+		fill(0);
+		textSize(16);
+		textAlign(TOP, LEFT);
+		for (int i = 0; i < array.length; ++i)
+			array[i] = new Number(i, (int)random(MIN, MAX), semaphore);
 	}
 	
 	public void randomize() {
-		for (int i = 0; i < array.length; ++i) {
-			array[i] = (int)random(MIN, MAX);
-			//rect(i * BAR_WIDTH, HEIGHT - array[i], BAR_WIDTH, array[i]);
-		}
+		for (int i = 0; i < array.length; ++i)
+			array[i] = new Number(i, (int)random(MIN, MAX), semaphore);
 		running = false;
 	}
 	
-	public static byte[] generateSineWavefreq(int frequencyOfSignal, int freq2, int seconds) {
-//		frequencyOfSignal = frequencyOfSignal * 2;
-//		freq2 = freq2 * 2;
+	public byte[] generateSineWavefreq(int frequencyOfSignal, int freq2, int seconds) {
 		double subs = (double)seconds / 1000;
         byte[] sin = new byte[(int)(subs * sampleRate)];
         double samplingInterval;
@@ -78,77 +62,112 @@ public class SortVisualization extends PApplet {
         	samplingInterval = (double) (sampleRate / frequencyOfSignal);
         else
         	samplingInterval = (double) (sampleRate / freq2);
-        //double samp2 = (double) (sampleRate / freq2);
         for (int i = 0; i < sin.length; i++) {
             double angle = (2.0 * Math.PI * i) / samplingInterval;
-//            double angle2 = (2.0 * Math.PI * i) / samp2;
             sin[i] = (byte) (Math.sin(angle) * 127);
-//            double other = Math.sin(angle2) * 127;
-//            if (other > sin[i])
-//            	sin[i] = (byte) (other);
         }
         return sin;
     }
 
 	public void draw() {
-		background(255);
-		for (int i = 0; i < array.length; ++i) {
-			if (i == cur1 || i == cur2) {
-				//stroke(255, 0, 0);
-				fill(0, 0, 255);
-				
-			} else if (i == cur3) {
-				//stroke(0, 0, 255);
-				fill(0, 0, 0);
-			} else if (i == cur4 || i == cur5) {
-				//stroke(0, 255, 0);
-				if (array[cur4] >= array[cur5])
-					fill(0, 255, 0);
-				else
-					fill(255, 0, 0);
-			} else {
-				//stroke(0);
-				fill(0);
-			}
-			stroke(255);
-			rect(i * BAR_WIDTH + i, HEIGHT - array[i], BAR_WIDTH, array[i]);
-			
-		}
 		
-		if (!focused) {
+		if (firstFrame) {
 			background(255);
-			fill(0);
-			textSize(72);
-			textAlign(CENTER, CENTER);
-			text("Click to start...", 0, 0, WIDTH, HEIGHT);
+			text("time: ", 5, 0, WIDTH, 18);
+			text("fps: ", 5, 18, WIDTH, 36);
+			text("sorts: (s)election (i)nsertion (m)erge (b)ogo (w)rong", 5, 36, WIDTH, 54);
+			text("misc: (n)ew (f)lip (c)heck", 5, 54, WIDTH, 72);
+			firstFrame = !firstFrame;
 		}
 		
-		textSize(16);
-		textAlign(TOP, LEFT);
-		fill(0);
+		++fps;
+		long currentTime = System.currentTimeMillis();
 		
 		if (running) {
-			endTime = System.currentTimeMillis() - startTime;
+			fill(255);
+			rect(5, 0, WIDTH, 18);
+			fill(0);
+			endTime = currentTime - startTime;
+			text("time: " + ((double)endTime / 1000), 5, 0, WIDTH, 18);
 		}
-		text("time: " + ((double)endTime / 1000), 5, 0, WIDTH, 75);
-		long millisSinceLast = System.currentTimeMillis() - secondCount;
-		secondCount = System.currentTimeMillis();
-		if (secondCount % 10 == 0) {
-			fps = 1000 / millisSinceLast;
-		}
-		text("fps: " + (int)fps, 5, 18, WIDTH, 75);
-		text("sorts: (s)election (i)nsertion (m)erge (b)ogo (w)rong", 5, 36, WIDTH, 75);
-		text("misc: (n)ew (f)lip (c)heck", 5, 54, WIDTH, 75);
 		
-		semaphore.drainPermits();
-		semaphore.release();
+		if (currentTime - 1000 > lastFpsOut) {
+			fill(255);
+			rect(5, 18, WIDTH, 18);
+			fill(0);
+			text("fps: " + (int)fps, 5, 18, WIDTH, 36);
+			fps = 0;
+			lastFpsOut = currentTime;
+		}
+		
+		if (!running) {
+			if (!highlighted.isEmpty()) {
+				for (int i : highlighted) {
+					fill(0);
+					rect(i * BAR_WIDTH + i, HEIGHT - array[i].getValue(), BAR_WIDTH, array[i].getValue());
+				}
+				highlighted.clear();
+			}
+		}
+		
+		toHighlight.clear();
+		for (int i = 0; i < array.length; ++i) {			
+			if (array[i].isHighlighted()) {
+				toHighlight.add(i);
+			}
+			
+			if (array[i].isDirty()) {
+				fill(255);
+				rect(i * BAR_WIDTH + i, HEIGHT - MAX, BAR_WIDTH, MAX);
+				fill(0);
+				rect(i * BAR_WIDTH + i, HEIGHT - array[i].getValue(), BAR_WIDTH, array[i].getValue());
+			}
+		}
+		
+		if (!toHighlight.isEmpty()) {
+			if (!highlighted.isEmpty()) {
+				for (int i = highlighted.size() - 1; i >= 0; --i) {
+					if (!toHighlight.contains(highlighted.get(i))) {
+						fill(0);
+						rect(highlighted.get(i) * BAR_WIDTH + highlighted.get(i), HEIGHT - array[highlighted.get(i)].getValue(), BAR_WIDTH, array[highlighted.get(i)].getValue());
+						
+						highlighted.remove(i);
+					} else {
+					}
+				}
+				//highlighted.clear();
+			}
+			
+			if (!toHighlight.equals(highlighted)) {
+				
+				for (int i : toHighlight) {
+					if (!highlighted.contains(i)) {
+						fill(0, 0, 255);
+						rect(i * BAR_WIDTH + i, HEIGHT - array[i].getValue(), BAR_WIDTH, array[i].getValue());
+						highlighted.add(i);
+					}
+				}
+			}
+			
+			semaphore.drainPermits();
+			semaphore.release();
+		}
+		
+		if (highlighted.size() > 2) {
+			println("ERROR: We should never have more than two bars highlighted.");
+			println(highlighted);
+			//noLoop();
+			//return;
+		}
+		
+		//
+		
 	}
 	
 	public void mousePressed() {
-//		if (!running)
-//			thread("rMergeSort");
+		return;
 	}
-		
+			
 	public void keyReleased() {
 		if (running)
 			return;
@@ -187,7 +206,9 @@ public class SortVisualization extends PApplet {
 	}
 	
 	private void swap(int a, int b) {
-		int temp = array[a];
+		array[a].dirty();
+		array[b].dirty();
+		Number temp = array[a];
 		array[a] = array[b];
 		array[b] = temp;
 	}
@@ -204,28 +225,10 @@ public class SortVisualization extends PApplet {
 			return true;
 		}
 		for (int i = 1; i < array.length; ++i) {
-			cur4 = i;
-			cur5 = i - 1;
-			if (cur4 > 0) {
-//				se.play(se.generateSineWavefreq(array[cur2],1));
-//				se.play(se.generateSineWavefreq(array[cur1],1));
-				play(array[cur4], array[cur5], SOUND_LENGTH);
-				//play(array[cur1], 1);
-				if (array[cur4] < array[cur5])
-					play(1, MIN, SOUND_LENGTH * 10);
-			}
-			try {
-				semaphore.acquire();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			if (array[i] < array[i - 1]) {
-				//cur4 = cur5 = -1;
-				//running = false;
-				//return false;
-			}
+			play(array[i], array[i - 1], SOUND_LENGTH);
+			if (array[i].lt(array[i - 1]))
+				play(new Number(-1, 1, semaphore), new Number(-1, MIN, semaphore), SOUND_LENGTH * 10);
 		}
-		cur4 = cur5 = -1;
 		running = false;
 		return true;
 	}
@@ -235,19 +238,16 @@ public class SortVisualization extends PApplet {
 			cur4 = i;
 			cur5 = i - 1;
 			if (cur4 > 0) {
-//				se.play(se.generateSineWavefreq(array[cur2],1));
-//				se.play(se.generateSineWavefreq(array[cur1],1));
 				play(array[cur4], array[cur5], SOUND_LENGTH);
-				//play(array[cur1], 1);
-				if (array[cur4] < array[cur5])
-					play(1, MIN, SOUND_LENGTH * 10);
+				if (array[cur4].lt(array[cur5]))
+					play(new Number(-1, 1, semaphore), new Number(-1, MIN, semaphore), SOUND_LENGTH * 10);
 			}
 			try {
 				semaphore.acquire();
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			if (array[i] < array[i - 1]) {
+			if (array[i].lt(array[i - 1])) {
 				cur4 = cur5 = -1;
 				return false;
 			}
@@ -255,9 +255,10 @@ public class SortVisualization extends PApplet {
 		return true;
 	}
 	
-	private void play(int freq, int freq2, int seconds) {
-		
-		int length = sampleRate * array.length / 1000;
+	private void play(Number f, Number f2, int seconds) {
+		int freq = f.getValue();
+		int freq2 = f2.getValue();
+		//int length = sampleRate * array.length / 1000;
 		if (playBoth) {
 			byte[] array = this.generateSineWavefreq(0, freq2, seconds);
 			byte[] array2 = this.generateSineWavefreq(freq, 0, seconds);
@@ -290,29 +291,16 @@ public class SortVisualization extends PApplet {
 		if (array.length <= 1)
 			return;
 		for (int i = 0; i < array.length; ++i) {
-			cur3 = i;
 			int min = i;
 			for (int j = i + 1; j < array.length; ++j) {
-				cur1 = j;
-				cur2 = min;
-				if (cur1 > 0) {
-//					se.play(se.generateSineWavefreq(array[cur2],1));
-//					se.play(se.generateSineWavefreq(array[cur1],1));
-					play(array[cur2], array[cur1], SOUND_LENGTH);
-					//play(array[cur1], 1);
-				}
-				try {
-					semaphore.acquire();
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-				if (array[j] < array[min])
+				if (j > 0)
+					play(array[min], array[j], SOUND_LENGTH);
+				if (array[j].lt(array[min]))
 					min = j;
 			}
 			if (min != i)
 				swap(i, min);
 		}
-		cur1 = cur2 = cur3 = -1;
 		isSorted();
 	}
 	
@@ -321,26 +309,17 @@ public class SortVisualization extends PApplet {
 		if (array.length <= 1)
 			return;
 		for (int i = 0; i < array.length; ++i) {
-			int valueToInsert = array[i];
+			Number valueToInsert = array[i];
 			int holePos = i;
-			while (holePos > 0 && valueToInsert < array[holePos - 1]) {
-				
-				//cur2 = -1;
-				cur1 = holePos - 1;
-				if (cur1 > 0)
-					play(valueToInsert, array[cur1], SOUND_LENGTH);
-				try {
-					semaphore.acquire();
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-				
-				array[holePos] = array[holePos - 1];
-				holePos -= 1;
+			while (holePos > 0 && valueToInsert.lt(array[holePos - 1])) {
+				if (holePos - 1 > 0)
+					play(valueToInsert, array[holePos - 1], SOUND_LENGTH);
+				swap(holePos, holePos - 1);
+				--holePos;
 			}
 			array[holePos] = valueToInsert;
+			array[holePos].dirty();
 		}
-		cur1 = cur2 = -1;
 		isSorted();
 	}
 	
@@ -359,35 +338,34 @@ public class SortVisualization extends PApplet {
 	public void rMergeSort()
 	 {
 		startTime = System.currentTimeMillis();
-	     rMergeSort(array, 0, array.length);
-	     cur1 = cur2 = -1;
-	     isSorted();
+	    rMergeSort(array, 0, array.length);
+	    cur1 = cur2 = -1;
+	    isSorted();
 	 }
 	 
-	 private void rMergeSort(int[] array, int start, int end)
+	 private void rMergeSort(Number[] array, int start, int end)
 	 {
-	     if (end - start <= 1) return;
-	     int middle = start + (end - start) / 2;
-	 
-	     rMergeSort(array, start, middle);
-	     rMergeSort(array, middle, end);
-	     merge(start, middle, end);
+	    if (end - start <= 1) return;
+	    int middle = start + (end - start) / 2;
+		rMergeSort(array, start, middle);
+		rMergeSort(array, middle, end);
+		merge(start, middle, end);
 	 }
 	
 	public void merge(int start, int middle, int end) {
-		int[] merge = new int[end - start];
+		Number[] merge = new Number[end - start];
 	    int l = 0, r = 0, i = 0;
 	    while (l < middle - start && r < end - middle) {
 	    	cur1 = start + l;
 			cur2 = middle + r;
 			if (cur1 > -1)
 				play(array[cur2], array[cur1], SOUND_LENGTH);
-			try {
-				semaphore.acquire();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-	    	if (array[start + l] < array[middle + r])
+//			try {
+//				semaphore.acquire();
+//			} catch (InterruptedException e) {
+//				e.printStackTrace();
+//			}
+	    	if (array[start + l].lt(array[middle + r]))
 	    		merge[i++] = array[start + l++];
 	    	else
 	    		merge[i++] = array[middle + r++];
@@ -397,23 +375,23 @@ public class SortVisualization extends PApplet {
 	 
 	    while (l < middle - start) merge[i++] = array[start + l++];
 	 
-	    //Array.Copy(merge, 0, array, start, merge.length);
 	    for (int i1 = 0; i1 < merge.length; ++i1) {
 	    	array[start++] = merge[i1];
+	    	array[start - 1].dirty();
 	    }
 	}
 	
 	public void quickSort() {
-		int[] sorted = quickSort(array);
+		Number[] sorted = quickSort(array);
 		array = sorted;
 	}
 	
-	public int[] quickSort(int[] arr) {
+	public Number[] quickSort(Number[] arr) {
 		if (arr.length < 2)
 			return arr;
 		int pivot = (int)random(0, arr.length - 1);
-		ArrayList<Integer> less = new ArrayList<Integer>();
-		ArrayList<Integer> more = new ArrayList<Integer>();
+		ArrayList<Number> less = new ArrayList<Number>();
+		ArrayList<Number> more = new ArrayList<Number>();
 		for (int i = 0; i < arr.length; ++i) {
 			
 			if (i == pivot)
@@ -429,21 +407,21 @@ public class SortVisualization extends PApplet {
 				e.printStackTrace();
 			}
 			
-			if (arr[i] <= arr[pivot])
+			if (arr[i].lte(arr[pivot]))
 				less.add(arr[i]);
 			else
 				more.add(arr[i]);
 		}
-		int[] lessA = new int[less.size()];
+		Number[] lessA = new Number[less.size()];
 		for (int i = 0; i < less.size(); ++i) {
 			lessA[i] = less.get(i);
 		}
-		int[] moreA = new int[more.size()];
+		Number[] moreA = new Number[more.size()];
 		for (int i = 0; i < more.size(); ++i) {
 			moreA[i] = more.get(i);
 		}
 		
-		int[] toInsert = concatenate(lessA, arr[pivot], moreA);
+		Number[] toInsert = concatenate(lessA, arr[pivot], moreA);
 		int pos = 0;
 		for (int i = 0; i < toInsert.length; i++) {
 			array[pos++] = toInsert[i];
@@ -452,9 +430,9 @@ public class SortVisualization extends PApplet {
 		return concatenate(quickSort(lessA), arr[pivot], quickSort(moreA));
 	}
 	
-	public int[] concatenate(int[] a, int b, int[] c) {
+	public Number[] concatenate(Number[] a, Number b, Number[] c) {
 		int len = a.length + 1 + c.length;
-		int[] r = new int[len];
+		Number[] r = new Number[len];
 		int pos = 0;
 		for (int i = 0; i < a.length; ++i)
 			r[pos++] = a[i];
