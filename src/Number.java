@@ -7,13 +7,15 @@ public class Number implements Comparable<Number> {
 	private boolean highlighted;
 	private boolean dirty;
 	private Semaphore semaphore;
+	private AudioEngine audio;
 
-	public Number(int key, int value, Semaphore semaphore) {
+	public Number(int key, int value, Semaphore semaphore, AudioEngine audio) {
 		this.key = key;
 		this.value = value;
 		this.highlighted = false;
 		this.dirty = true;
 		this.semaphore = semaphore;
+		this.audio = audio;
 	}
 	
 	public String toString() {
@@ -23,11 +25,12 @@ public class Number implements Comparable<Number> {
 	public int compareTo(Number that) {
 		this.highlighted();
 		that.highlighted();
-		try {
-			semaphore.acquire();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+		AudioEngine.play(this, that, 10);
+//		try {
+//			semaphore.acquire();
+//		} catch (InterruptedException e) {
+//			e.printStackTrace();
+//		}
 		return this.value - that.value;
 	}
 	
@@ -51,8 +54,8 @@ public class Number implements Comparable<Number> {
 		return this.compareTo(that) >= 0;
 	}
 	
-	public int compareToInt(int i) {
-		Number that = new Number(-1, i, this.semaphore);
+	public int compareToInt(int num) {
+		Number that = new Number(-1, num, this.semaphore, this.audio);
 		return this.compareTo(that);
 	}
 	
