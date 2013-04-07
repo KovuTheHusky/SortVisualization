@@ -2,22 +2,18 @@ package sortvisualization;
 
 public class Number implements Comparable<Number> {
 	
-	private int key;
 	private int value;
 	private boolean highlighted;
 	private boolean dirty;
-	private AudioEngine audio;
 
-	public Number(int key, int value, AudioEngine audio) {
-		this.key = key;
+	public Number(int value) {
 		this.value = value;
 		this.highlighted = false;
 		this.dirty = true;
-		this.audio = audio;
 	}
 	
 	public String toString() {
-		return "[" + key + " " + value + "]";
+		return this.value + "";
 	}
 
 	public int compareTo(Number that) {
@@ -48,7 +44,7 @@ public class Number implements Comparable<Number> {
 	}
 	
 	public int compareToInt(int num) {
-		Number that = new Number(-1, num, this.audio);
+		Number that = new Number(num);
 		return this.compareTo(that);
 	}
 	

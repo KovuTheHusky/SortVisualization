@@ -12,14 +12,12 @@ public class SortVisualization extends PApplet {
 	private static final int MIN = 100;
 	private static final int MAX = 900;
 	private static final int BAR_WIDTH = WIDTH / ARRAY_LENGTH - 1;
-	private static final int PAUSE = 20;
 
 	private Number[] array = new Number[ARRAY_LENGTH];
 	private boolean running = false;
 
 	private ArrayList<Integer> highlighted = new ArrayList<Integer>();
 	private ArrayList<Integer> toHighlight = new ArrayList<Integer>();
-	private AudioEngine audio = new AudioEngine();
 
 	private double fps = 0;
 	private long lastFpsOut = 0;
@@ -32,29 +30,20 @@ public class SortVisualization extends PApplet {
 		fill(0);
 		textSize(16);
 		textAlign(TOP, LEFT);
-		for (int i = 0; i < array.length; ++i)
-			array[i] = new Number(i, (int)random(MIN, MAX), audio);
+		newArray();
 	}
-
-	public void randomize() {
-		for (int i = 0; i < array.length; ++i)
-			array[i] = new Number(i, (int)random(MIN, MAX), audio);
-		running = false;
-	}
-
+	
 	@Override
 	public void draw() {
-
 		++fps;
 		long time = System.currentTimeMillis();
-
 		if (time - 1000 > lastFpsOut) {
 			fill(255);
 			rect(5, 0, WIDTH, 59);
 			fill(0);
 			text("FPS: " + (int)fps, 5, 5, WIDTH, 23);
-			text("Sorting algorithms: (s)election  (i)nsertion  (m)erge  bottom up m(e)rge  (b)ogo", 5, 23, WIDTH, 41);
-			text("Miscellaneous: (n)ew  (f)lip  (c)heck", 5, 41, WIDTH, 59);
+			text("Sorting algorithms: (s)election  (i)nsertion  (m)erge  recursive m(e)rge  (b)ogo", 5, 23, WIDTH, 41);
+			text("Miscellaneous: (n)ew  (f)lip  (c)heck  (1-9) pause length", 5, 41, WIDTH, 59);
 			fps = 0;
 			lastFpsOut = time;
 		}
@@ -89,16 +78,12 @@ public class SortVisualization extends PApplet {
 					if (!toHighlight.contains(highlighted.get(i))) {
 						fill(0);
 						rect(highlighted.get(i) * BAR_WIDTH + highlighted.get(i), HEIGHT - array[highlighted.get(i)].getValue(), BAR_WIDTH, array[highlighted.get(i)].getValue());
-
 						highlighted.remove(i);
-					} else {
 					}
 				}
-				// highlighted.clear();
 			}
 
 			if (!toHighlight.equals(highlighted)) {
-
 				for (int i : toHighlight) {
 					if (!highlighted.contains(i)) {
 						fill(0, 0, 255);
@@ -112,12 +97,37 @@ public class SortVisualization extends PApplet {
 	}
 
 	@Override
-	public void mousePressed() {
-		return;
-	}
-
-	@Override
 	public void keyReleased() {
+		switch (key) {
+			case '1':
+				AudioEngine.setSoundLength(10);
+				break;
+			case '2':
+				AudioEngine.setSoundLength(20);
+				break;
+			case '3':
+				AudioEngine.setSoundLength(30);
+				break;
+			case '4':
+				AudioEngine.setSoundLength(40);
+				break;
+			case '5':
+				AudioEngine.setSoundLength(50);
+				break;
+			case '6':
+				AudioEngine.setSoundLength(60);
+				break;
+			case '7':
+				AudioEngine.setSoundLength(70);
+				break;
+			case '8':
+				AudioEngine.setSoundLength(80);
+				break;
+			case '9':
+				AudioEngine.setSoundLength(90);
+				break;
+		}
+		
 		if (running)
 			return;
 		running = true;
@@ -128,56 +138,51 @@ public class SortVisualization extends PApplet {
 			case 'i':
 				thread("insertionSort");
 				break;
-			case 'm':
-				thread("rMergeSort");
+			case 'e':
+				thread("mergeSortRecursive");
 				break;
 			case 'b':
 				thread("bogoSort");
 				break;
-			case 'e':
+			case 'm':
 				thread("mergeSort");
-				break;
-			case 'q':
-				thread("quickSort");
 				break;
 			case 'c':
 				thread("isSorted");
 				break;
 			case 'n':
-				randomize();
+				newArray();
 				break;
 			case 'f':
-				flip();
+				flipArray();
 				break;
 			default:
 				running = false;
 		}
 	}
-
-	private void swap(int a, int b) {
-		array[a].dirty();
-		array[b].dirty();
-		Number temp = array[a];
-		array[a] = array[b];
-		array[b] = temp;
+	
+	private void newArray() {
+		for (int i = 0; i < array.length; ++i)
+			array[i] = new Number((int)random(MIN, MAX));
+		running = false;
 	}
-
-	public void flip() {
+	
+	private void flipArray() {
 		for (int i = 0; i < array.length / 2; ++i)
 			swap(i, array.length - i - 1);
 		running = false;
 	}
-
+	
 	public boolean isSorted() {
 		if (array.length <= 1)
 			return !(running = false);
 		for (int i = 1; i < array.length; ++i)
 			if (array[i].lt(array[i - 1]))
 				return (running = false);
-		return (running = false);
+		return !(running = false);
 	}
-
-	public boolean isSorted(boolean keepRunning) {
+	
+	private boolean isSorted(boolean keepRunning) {
 		if (!keepRunning)
 			return isSorted();
 		if (array.length <= 1)
@@ -186,6 +191,14 @@ public class SortVisualization extends PApplet {
 			if (array[i].lt(array[i - 1]))
 				return false;
 		return true;
+	}
+
+	private void swap(int a, int b) {
+		array[a].dirty();
+		array[b].dirty();
+		Number temp = array[a];
+		array[a] = array[b];
+		array[b] = temp;
 	}
 
 	public void bogoSort() {
@@ -248,7 +261,7 @@ public class SortVisualization extends PApplet {
 		isSorted();
 	}
 
-	public void mergeArrays(Number[] array, int startL, int stopL, int startR, int stopR) {
+	private void mergeArrays(Number[] array, int startL, int stopL, int startR, int stopR) {
 		Number[] right = new Number[stopR - startR + 1];
 		Number[] left = new Number[stopL - startL + 1];
 
@@ -257,8 +270,8 @@ public class SortVisualization extends PApplet {
 		for (int i = 0, k = startL; i < (left.length - 1); ++i, ++k)
 			left[i] = array[k];
 
-		right[right.length - 1] = new Number(-1, Integer.MAX_VALUE, audio);
-		left[left.length - 1] = new Number(-1, Integer.MAX_VALUE, audio);
+		right[right.length - 1] = new Number(Integer.MAX_VALUE);
+		left[left.length - 1] = new Number(Integer.MAX_VALUE);
 
 		for (int k = startL, m = 0, n = 0; k < stopR; ++k) {
 			if (left[m].lte(right[n])) {
@@ -272,21 +285,21 @@ public class SortVisualization extends PApplet {
 		}
 	}
 
-	public void rMergeSort() {
-		rMergeSort(array, 0, array.length);
+	public void mergeSortRecursive() {
+		mergeSortRecursive(array, 0, array.length);
 		isSorted();
 	}
 
-	private void rMergeSort(Number[] array, int start, int end) {
+	private void mergeSortRecursive(Number[] array, int start, int end) {
 		if (end - start <= 1)
 			return;
 		int middle = start + (end - start) / 2;
-		rMergeSort(array, start, middle);
-		rMergeSort(array, middle, end);
+		mergeSortRecursive(array, start, middle);
+		mergeSortRecursive(array, middle, end);
 		merge(start, middle, end);
 	}
 
-	public void merge(int start, int middle, int end) {
+	private void merge(int start, int middle, int end) {
 		Number[] merge = new Number[end - start];
 		int l = 0, r = 0, pos = 0;
 		while (l < middle - start && r < end - middle) {
@@ -303,57 +316,6 @@ public class SortVisualization extends PApplet {
 			array[start++] = merge[i];
 			array[start - 1].dirty();
 		}
-	}
-
-	public void quickSort() {
-		Number[] sorted = quickSort(array);
-		array = sorted;
-	}
-
-	public Number[] quickSort(Number[] arr) {
-		if (arr.length < 2)
-			return arr;
-		int pivot = (int)random(0, arr.length - 1);
-		ArrayList<Number> less = new ArrayList<Number>();
-		ArrayList<Number> more = new ArrayList<Number>();
-		for (int i = 0; i < arr.length; ++i) {
-			if (i == pivot)
-				continue;
-			if (i > -1)
-				AudioEngine.play(array[pivot], array[i], PAUSE);
-			if (arr[i].lte(arr[pivot]))
-				less.add(arr[i]);
-			else
-				more.add(arr[i]);
-		}
-		Number[] lessA = new Number[less.size()];
-		for (int i = 0; i < less.size(); ++i) {
-			lessA[i] = less.get(i);
-		}
-		Number[] moreA = new Number[more.size()];
-		for (int i = 0; i < more.size(); ++i) {
-			moreA[i] = more.get(i);
-		}
-
-		Number[] toInsert = concatenate(lessA, arr[pivot], moreA);
-		int pos = 0;
-		for (int i = 0; i < toInsert.length; i++) {
-			array[pos++] = toInsert[i];
-		}
-
-		return concatenate(quickSort(lessA), arr[pivot], quickSort(moreA));
-	}
-
-	public Number[] concatenate(Number[] a, Number b, Number[] c) {
-		int len = a.length + 1 + c.length;
-		Number[] r = new Number[len];
-		int pos = 0;
-		for (int i = 0; i < a.length; ++i)
-			r[pos++] = a[i];
-		r[pos++] = b;
-		for (int i = 0; i < c.length; ++i)
-			r[pos++] = c[i];
-		return r;
 	}
 
 }

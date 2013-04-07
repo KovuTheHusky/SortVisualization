@@ -7,11 +7,13 @@ import javax.sound.sampled.SourceDataLine;
 
 public class AudioEngine {
 
-	private static final int sampleRate = 44000;
-	public static SourceDataLine line;
+	private static final int SAMPLE_RATE = 44000;
+	
+	private static SourceDataLine line;
+	private static int soundLength = 10;
 
 	public AudioEngine() {
-		final AudioFormat af = new AudioFormat(sampleRate, 16, 1, true, true);
+		final AudioFormat af = new AudioFormat(SAMPLE_RATE, 16, 1, true, true);
 		try {
 			line = AudioSystem.getSourceDataLine(af);
 			line.open(af);
@@ -23,14 +25,11 @@ public class AudioEngine {
 		}
 	}
 
-	private static byte[] generateSineWavefreq(int frequencyOfSignal, int freq2, int seconds) {
-		double subs = (double)seconds / 1000;
-		byte[] sin = new byte[(int)(subs * sampleRate)];
+	private static byte[] generateSineWavefreq(int freq, int millis) {
+		millis = soundLength;
+		byte[] sin = new byte[(int)((double)millis / 1000 * SAMPLE_RATE)];
 		double samplingInterval;
-		if (frequencyOfSignal > freq2)
-			samplingInterval = (double)(sampleRate / frequencyOfSignal);
-		else
-			samplingInterval = (double)(sampleRate / freq2);
+		samplingInterval = (double)(SAMPLE_RATE / freq);
 		for (int i = 0; i < sin.length; i++) {
 			double angle = (2.0 * Math.PI * i) / samplingInterval;
 			sin[i] = (byte)(Math.sin(angle) * 127);
@@ -38,23 +37,17 @@ public class AudioEngine {
 		return sin;
 	}
 
-	public static void play(Number f, Number f2, int seconds) {
-		int freq = f.getValue();
-		int freq2 = f2.getValue();
-		// int length = sampleRate * array.length / 1000;
-		byte[] array = AudioEngine.generateSineWavefreq(0, freq2, seconds);
-		byte[] array2 = AudioEngine.generateSineWavefreq(freq, 0, seconds);
-		line.write(array, 0, array.length);
-		line.write(array2, 0, array2.length);
+	public static void play(Number num, Number num2, int millis) {
+		millis = soundLength;
+		byte[] arr = AudioEngine.generateSineWavefreq(num.getValue(), millis);
+		byte[] arr2 = AudioEngine.generateSineWavefreq(num2.getValue(), millis);
+		line.write(arr, 0, arr.length);
+		line.write(arr2, 0, arr2.length);
 		line.drain();
 	}
-
-	public static void play(int frequency, int seconds) {
-		int freq = frequency;
-		// int length = sampleRate * array.length / 1000;
-		byte[] array = AudioEngine.generateSineWavefreq(freq, 0, seconds);
-		line.write(array, 0, array.length);
-		line.drain();
+	
+	public static void setSoundLength(int len) {
+		soundLength = len;
 	}
 
 }
