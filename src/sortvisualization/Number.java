@@ -1,4 +1,4 @@
-import java.util.concurrent.Semaphore;
+package sortvisualization;
 
 public class Number implements Comparable<Number> {
 	
@@ -6,15 +6,13 @@ public class Number implements Comparable<Number> {
 	private int value;
 	private boolean highlighted;
 	private boolean dirty;
-	private Semaphore semaphore;
 	private AudioEngine audio;
 
-	public Number(int key, int value, Semaphore semaphore, AudioEngine audio) {
+	public Number(int key, int value, AudioEngine audio) {
 		this.key = key;
 		this.value = value;
 		this.highlighted = false;
 		this.dirty = true;
-		this.semaphore = semaphore;
 		this.audio = audio;
 	}
 	
@@ -26,11 +24,6 @@ public class Number implements Comparable<Number> {
 		this.highlighted();
 		that.highlighted();
 		AudioEngine.play(this, that, 10);
-//		try {
-//			semaphore.acquire();
-//		} catch (InterruptedException e) {
-//			e.printStackTrace();
-//		}
 		return this.value - that.value;
 	}
 	
@@ -55,7 +48,7 @@ public class Number implements Comparable<Number> {
 	}
 	
 	public int compareToInt(int num) {
-		Number that = new Number(-1, num, this.semaphore, this.audio);
+		Number that = new Number(-1, num, this.audio);
 		return this.compareTo(that);
 	}
 	
