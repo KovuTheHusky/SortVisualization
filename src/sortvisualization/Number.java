@@ -19,7 +19,7 @@ public class Number implements Comparable<Number> {
 	public int compareTo(Number that) {
 		this.highlighted();
 		that.highlighted();
-		AudioEngine.play(this, that, 10);
+		AudioEngine.play(this, that);
 		return this.value - that.value;
 	}
 	

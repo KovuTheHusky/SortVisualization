@@ -5,14 +5,14 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.FloatControl;
 import javax.sound.sampled.SourceDataLine;
 
-public class AudioEngine {
+public final class AudioEngine {
 
 	private static final int SAMPLE_RATE = 44000;
-	
-	private static SourceDataLine line;
-	private static int soundLength = 10;
 
-	public AudioEngine() {
+	private static SourceDataLine line;
+	private static int length;
+
+	static {
 		final AudioFormat af = new AudioFormat(SAMPLE_RATE, 16, 1, true, true);
 		try {
 			line = AudioSystem.getSourceDataLine(af);
@@ -25,9 +25,8 @@ public class AudioEngine {
 		}
 	}
 
-	private static byte[] generateSineWavefreq(int freq, int millis) {
-		millis = soundLength;
-		byte[] sin = new byte[(int)((double)millis / 1000 * SAMPLE_RATE)];
+	private static byte[] generateSineWavefreq(int freq) {
+		byte[] sin = new byte[(int)((double)length / 1000 * SAMPLE_RATE)];
 		double samplingInterval;
 		samplingInterval = (double)(SAMPLE_RATE / freq);
 		for (int i = 0; i < sin.length; i++) {
@@ -37,17 +36,16 @@ public class AudioEngine {
 		return sin;
 	}
 
-	public static void play(Number num, Number num2, int millis) {
-		millis = soundLength;
-		byte[] arr = AudioEngine.generateSineWavefreq(num.getValue(), millis);
-		byte[] arr2 = AudioEngine.generateSineWavefreq(num2.getValue(), millis);
+	public static void play(Number num, Number num2) {
+		byte[] arr = AudioEngine.generateSineWavefreq(num.getValue());
+		byte[] arr2 = AudioEngine.generateSineWavefreq(num2.getValue());
 		line.write(arr, 0, arr.length);
 		line.write(arr2, 0, arr2.length);
 		line.drain();
 	}
-	
-	public static void setSoundLength(int len) {
-		soundLength = len;
+
+	public static void setLength(int length) {
+		AudioEngine.length = length;
 	}
 
 }

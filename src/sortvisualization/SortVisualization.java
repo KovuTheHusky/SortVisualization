@@ -31,6 +31,7 @@ public class SortVisualization extends PApplet {
 		textSize(16);
 		textAlign(TOP, LEFT);
 		newArray();
+		AudioEngine.setLength(10);
 	}
 	
 	@Override
@@ -100,32 +101,15 @@ public class SortVisualization extends PApplet {
 	public void keyReleased() {
 		switch (key) {
 			case '1':
-				AudioEngine.setSoundLength(10);
-				break;
 			case '2':
-				AudioEngine.setSoundLength(20);
-				break;
 			case '3':
-				AudioEngine.setSoundLength(30);
-				break;
 			case '4':
-				AudioEngine.setSoundLength(40);
-				break;
 			case '5':
-				AudioEngine.setSoundLength(50);
-				break;
 			case '6':
-				AudioEngine.setSoundLength(60);
-				break;
 			case '7':
-				AudioEngine.setSoundLength(70);
-				break;
 			case '8':
-				AudioEngine.setSoundLength(80);
-				break;
 			case '9':
-				AudioEngine.setSoundLength(90);
-				break;
+				AudioEngine.setLength(Integer.parseInt(key + "") * 10);
 		}
 		
 		if (running)
