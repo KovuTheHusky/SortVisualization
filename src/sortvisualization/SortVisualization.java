@@ -1,9 +1,7 @@
 package sortvisualization;
 
 import java.util.ArrayList;
-
 import javax.swing.JOptionPane;
-
 import processing.core.*;
 
 @SuppressWarnings("serial")
@@ -19,14 +17,12 @@ public class SortVisualization extends PApplet {
 	private static final int MIN = (int)(HEIGHT * 0.1);
 	private static final int MAX = (int)(HEIGHT * 0.9);
 	private static final int BAR_WIDTH = WIDTH / ARRAY_LENGTH - 1;
-	private static final String VERSION = "0.1.1";
+	private static final String VERSION = "0.1.2";
 
 	// Make a spot for an array
 	private Number[] array = new Number[ARRAY_LENGTH];
 	// Lets keep track of when we are sorting
 	private boolean running = false;
-	// Make sure we got focus at least once
-	private boolean clicked = false;
 
 	// Lists to keep track of what needs to be highlighted or dehighlighted
 	private ArrayList<Integer> highlighted = new ArrayList<Integer>();
@@ -35,7 +31,7 @@ public class SortVisualization extends PApplet {
 	// Counter for frames per second and the last time we showed it
 	private double fps = 0;
 	private long lastFpsOut = 0;
-	
+
 	public static void main(String args[]) {
 		PApplet.main("sortvisualization.SortVisualization", args);
 	}
@@ -75,21 +71,7 @@ public class SortVisualization extends PApplet {
 			// Reset the FPS count and set the last FPS out time to now
 			fps = 0;
 			lastFpsOut = time;
-
-			// If we do not have focus, let the user know
-			if (!this.clicked) {
-				fill(255);
-				rect(0, HEIGHT / 2, WIDTH, HEIGHT / 2);
-				fill(0);
-				textSize(32);
-				textAlign(CENTER);
-				text("Please click inside the window to get started.", 0, HEIGHT / 2, WIDTH, HEIGHT);
-			}
 		}
-
-		// If we have not gotten focus yet, return
-		if (!this.clicked)
-			return;
 
 		// If we are not running and there are highlighted bars, we need to dehighlight the bars
 		if (!running && !highlighted.isEmpty()) {
@@ -155,17 +137,12 @@ public class SortVisualization extends PApplet {
 	}
 
 	@Override
-	public void mousePressed() {
-		this.clicked = true;
-	}
-
-	@Override
 	public void keyReleased() {
 		// If it was a number key, switch the running speed
 		switch (key) {
 			case 'a':
 				// TODO: This next line should be cleaned up
-				JOptionPane.showMessageDialog(this, "SortVisualization is a project designed" + System.lineSeparator() + "for educational purposes. It was made by" + System.lineSeparator() + "Kevin Breslin who is a student at" + System.lineSeparator() + "Suffolk County Community College in" + System.lineSeparator() + "Selden, New York. Version " + VERSION + ".", "About", JOptionPane.INFORMATION_MESSAGE);
+				thread("about");
 				break;
 			case '1':
 			case '2':
@@ -213,6 +190,10 @@ public class SortVisualization extends PApplet {
 			default:
 				running = false;
 		}
+	}
+
+	public void about() {
+		JOptionPane.showMessageDialog(this, "SortVisualization is a project designed" + System.lineSeparator() + "for educational purposes. It was made by" + System.lineSeparator() + "Kevin Breslin who is a student at" + System.lineSeparator() + "Suffolk County Community College in" + System.lineSeparator() + "Selden, New York. Version " + VERSION + ".", "About", JOptionPane.INFORMATION_MESSAGE);
 	}
 
 	private void newArray() {
