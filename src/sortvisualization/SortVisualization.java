@@ -9,13 +9,14 @@ public class SortVisualization extends PApplet {
 
 	// Anybody should be able to adjust the array length and height
 	private static final int ARRAY_LENGTH = 100;
-	private static final int HEIGHT = 750; // TODO: If less than 600, stuff will overlap
+	private static final int HEIGHT = 600;
 
 	// Set up the rest of the values based on the array length and height
 	@SuppressWarnings("unused")
 	private static final int WIDTH = ARRAY_LENGTH > 250 ? ARRAY_LENGTH * 4 : 1000;
 	private static final int MIN = (int)(HEIGHT * 0.1);
-	private static final int MAX = (int)(HEIGHT * 0.9);
+	@SuppressWarnings("unused")
+	private static final int MAX = HEIGHT >= 600 ? (int)(HEIGHT * 0.9) : (int)((HEIGHT - 59) * 0.9);
 	private static final int BAR_WIDTH = WIDTH / ARRAY_LENGTH - 1;
 	private static final String VERSION = "0.1.2";
 
@@ -112,7 +113,8 @@ public class SortVisualization extends PApplet {
 					if (!toHighlight.contains(highlighted.get(i))) {
 						// No, we should repaint it dehighlighted
 						fill(0);
-						rect(highlighted.get(i) * BAR_WIDTH + highlighted.get(i), HEIGHT - array[highlighted.get(i)].getValue(), BAR_WIDTH, array[highlighted.get(i)].getValue());
+						rect(highlighted.get(i) * BAR_WIDTH + highlighted.get(i), HEIGHT - array[highlighted.get(i)].getValue(), 
+								BAR_WIDTH, array[highlighted.get(i)].getValue());
 						// Remove it from the highlighted list
 						highlighted.remove(i);
 					}
@@ -141,7 +143,6 @@ public class SortVisualization extends PApplet {
 		// If it was a number key, switch the running speed
 		switch (key) {
 			case 'a':
-				// TODO: This next line should be cleaned up
 				thread("about");
 				break;
 			case '1':
@@ -193,7 +194,11 @@ public class SortVisualization extends PApplet {
 	}
 
 	public void about() {
-		JOptionPane.showMessageDialog(this, "SortVisualization is a project designed" + System.lineSeparator() + "for educational purposes. It was made by" + System.lineSeparator() + "Kevin Breslin who is a student at" + System.lineSeparator() + "Suffolk County Community College in" + System.lineSeparator() + "Selden, New York. Version " + VERSION + ".", "About", JOptionPane.INFORMATION_MESSAGE);
+		JOptionPane.showMessageDialog(this, "SortVisualization is a project designed" + System.lineSeparator() + 
+				"for educational purposes. It was made by" + System.lineSeparator() + 
+				"Kevin Breslin who is a student at" + System.lineSeparator() + 
+				"Suffolk County Community College in" + System.lineSeparator() + 
+				"Selden, New York. Version " + VERSION + ".", "About", JOptionPane.INFORMATION_MESSAGE);
 	}
 
 	private void newArray() {
