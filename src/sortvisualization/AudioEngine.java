@@ -3,6 +3,7 @@ package sortvisualization;
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.FloatControl;
+import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.SourceDataLine;
 
 public final class AudioEngine {
@@ -10,19 +11,19 @@ public final class AudioEngine {
 	private static final int SAMPLE_RATE = 44000;
 
 	private static SourceDataLine line;
-	private static int length;
+	private static int length = 10;
 
 	static {
 		final AudioFormat af = new AudioFormat(SAMPLE_RATE, 16, 1, true, true);
 		try {
 			line = AudioSystem.getSourceDataLine(af);
 			line.open(af);
-			line.start();
-			FloatControl gainControl = (FloatControl)line.getControl(FloatControl.Type.MASTER_GAIN);
-			gainControl.setValue(-20.0f);
-		} catch (Exception e) {
+		} catch (LineUnavailableException e) {
 			e.printStackTrace();
 		}
+		line.start();
+		FloatControl gainControl = (FloatControl)line.getControl(FloatControl.Type.MASTER_GAIN);
+		gainControl.setValue(-20.0f);
 	}
 
 	private static byte[] generateSineWavefreq(int freq) {
@@ -42,6 +43,10 @@ public final class AudioEngine {
 		line.write(arr, 0, arr.length);
 		line.write(arr2, 0, arr2.length);
 		line.drain();
+	}
+	
+	public static int getLength() {
+		return AudioEngine.length;
 	}
 
 	public static void setLength(int length) {

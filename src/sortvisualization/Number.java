@@ -77,8 +77,7 @@ public class Number implements Comparable<Number> {
 	}
 	
 	public boolean isHighlighted() {
-		boolean ret = false;
-		if (this.highlighted) ret = true;
+		boolean ret = this.highlighted;
 		this.highlighted = false;
 		return ret;
 	}
@@ -88,8 +87,7 @@ public class Number implements Comparable<Number> {
 	}
 	
 	public boolean isDirty() {
-		boolean ret = false;
-		if (this.dirty) ret = true;
+		boolean ret = this.dirty;
 		this.dirty = false;
 		return ret;
 	}
