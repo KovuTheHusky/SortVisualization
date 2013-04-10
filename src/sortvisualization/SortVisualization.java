@@ -19,7 +19,7 @@ public class SortVisualization extends PApplet {
 	private static final int MIN = (int)(HEIGHT * 0.1);
 	private static final int MAX = (int)(HEIGHT * 0.9);
 	private static final int BAR_WIDTH = WIDTH / ARRAY_LENGTH - 1;
-	private static final String VERSION = "0.1.0";
+	private static final String VERSION = "0.1.1";
 
 	// Make a spot for an array
 	private Number[] array = new Number[ARRAY_LENGTH];
