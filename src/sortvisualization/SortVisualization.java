@@ -8,7 +8,7 @@ public class SortVisualization extends PApplet {
 
 	// Anybody should be able to adjust the array length and height
 	private static final int ARRAY_LENGTH = 100;
-	private static final int HEIGHT = 200; // TODO: If less than 600, stuff will overlap
+	private static final int HEIGHT = 750; // TODO: If less than 600, stuff will overlap
 
 	// Set up the rest of the values based on the array length and height
 	@SuppressWarnings("unused")
@@ -16,6 +16,7 @@ public class SortVisualization extends PApplet {
 	private static final int MIN = (int)(HEIGHT * 0.1);
 	private static final int MAX = (int)(HEIGHT * 0.9);
 	private static final int BAR_WIDTH = WIDTH / ARRAY_LENGTH - 1;
+	private static final String version = "0.1.0";
 
 	// Make a spot for an array
 	private Number[] array = new Number[ARRAY_LENGTH];
@@ -56,7 +57,7 @@ public class SortVisualization extends PApplet {
 			fill(255);
 			rect(5, 0, WIDTH, 59);
 			fill(0);
-			text("FPS: " + (int)fps, 5, 5, WIDTH, 23);
+			text("v" + this.version + ", FPS: " + (int)fps, 5, 5, WIDTH, 23);
 			text("Sorting algorithms: (s)election  (i)nsertion  (m)erge  recursive m(e)rge  (b)ogo", 5, 23, WIDTH, 41);
 			text("Miscellaneous: (n)ew  (f)lip  (c)heck  (1-9) pause length", 5, 41, WIDTH, 59);
 			// Reset the FPS count and set the last FPS out time to now
