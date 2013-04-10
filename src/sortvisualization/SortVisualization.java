@@ -1,6 +1,9 @@
 package sortvisualization;
 
 import java.util.ArrayList;
+
+import javax.swing.JOptionPane;
+
 import processing.core.*;
 
 @SuppressWarnings("serial")
@@ -22,6 +25,8 @@ public class SortVisualization extends PApplet {
 	private Number[] array = new Number[ARRAY_LENGTH];
 	// Lets keep track of when we are sorting
 	private boolean running = false;
+	// Make sure we got focus at least once
+	private boolean clicked = false;
 
 	// Lists to keep track of what needs to be highlighted or dehighlighted
 	private ArrayList<Integer> highlighted = new ArrayList<Integer>();
@@ -35,6 +40,7 @@ public class SortVisualization extends PApplet {
 	public void setup() {
 		// Set the size, background, stroke, fill, text settings, and sound length
 		size(WIDTH, HEIGHT);
+		smooth();
 		background(255);
 		stroke(255);
 		fill(0);
@@ -57,13 +63,29 @@ public class SortVisualization extends PApplet {
 			fill(255);
 			rect(5, 0, WIDTH, 59);
 			fill(0);
+			textSize(16);
+			textAlign(TOP, LEFT);
 			text("v" + VERSION + ", FPS: " + (int)fps, 5, 5, WIDTH, 23);
 			text("Sorting algorithms: (s)election  (i)nsertion  (m)erge  recursive m(e)rge  (b)ogo", 5, 23, WIDTH, 41);
-			text("Miscellaneous: (n)ew  (f)lip  (c)heck  (1-9) pause length", 5, 41, WIDTH, 59);
+			text("Miscellaneous: (n)ew  (f)lip  (c)heck  (1-9) pause length  (a)bout", 5, 41, WIDTH, 59);
 			// Reset the FPS count and set the last FPS out time to now
 			fps = 0;
 			lastFpsOut = time;
+
+			// If we do not have focus, let the user know
+			if (!this.clicked) {
+				fill(255);
+				rect(0, HEIGHT / 2, WIDTH, HEIGHT / 2);
+				fill(0);
+				textSize(32);
+				textAlign(CENTER);
+				text("Please click inside the window to get started.", 0, HEIGHT / 2, WIDTH, HEIGHT);
+			}
 		}
+
+		// If we have not gotten focus yet, return
+		if (!this.clicked)
+			return;
 
 		// If we are not running and there are highlighted bars, we need to dehighlight the bars
 		if (!running && !highlighted.isEmpty()) {
@@ -129,9 +151,18 @@ public class SortVisualization extends PApplet {
 	}
 
 	@Override
+	public void mousePressed() {
+		this.clicked = true;
+	}
+
+	@Override
 	public void keyReleased() {
 		// If it was a number key, switch the running speed
 		switch (key) {
+			case 'a':
+				// TODO: This next line should be cleaned up
+				JOptionPane.showMessageDialog(this, "SortVisualization is a project designed" + System.lineSeparator() + "for educational purposes. It was made by" + System.lineSeparator() + "Kevin Breslin who is a student at" + System.lineSeparator() + "Suffolk County Community College in" + System.lineSeparator() + "Selden, New York. Version " + VERSION + ".", "About", JOptionPane.INFORMATION_MESSAGE);
+				break;
 			case '1':
 			case '2':
 			case '3':
@@ -147,7 +178,7 @@ public class SortVisualization extends PApplet {
 		// Everything else only works if you are not running
 		if (running)
 			return;
-		
+
 		// We are running now
 		running = true;
 		switch (key) {
