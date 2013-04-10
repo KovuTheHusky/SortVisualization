@@ -35,6 +35,10 @@ public class SortVisualization extends PApplet {
 	// Counter for frames per second and the last time we showed it
 	private double fps = 0;
 	private long lastFpsOut = 0;
+	
+	public static void main(String args[]) {
+		PApplet.main("sortvisualization.SortVisualization", args);
+	}
 
 	@Override
 	public void setup() {
