@@ -13,12 +13,12 @@ public class SortVisualization extends PApplet {
 
 	// Set up the rest of the values based on the array length and height
 	@SuppressWarnings("unused")
-	private static final int WIDTH = ARRAY_LENGTH > 250 ? ARRAY_LENGTH * 4 : 1000;
-	private static final int MIN = (int)(HEIGHT * 0.1);
-	@SuppressWarnings("unused")
-	private static final int MAX = HEIGHT >= 600 ? (int)(HEIGHT * 0.9) : (int)((HEIGHT - 59) * 0.9);
+	private static final int WIDTH = ARRAY_LENGTH > 200 ? ARRAY_LENGTH * 4 : 800;
 	private static final int BAR_WIDTH = WIDTH / ARRAY_LENGTH - 1;
-	private static final String VERSION = "0.1.2";
+	private static final int TEXT_HEIGHT = 59;
+	private static final int MIN = (int)(HEIGHT * 0.1);
+	private static final int MAX = (int)((HEIGHT - TEXT_HEIGHT) * 0.9);
+	private static final String VERSION = "0.1.3";
 
 	// Make a spot for an array
 	private Number[] array = new Number[ARRAY_LENGTH];
@@ -62,13 +62,13 @@ public class SortVisualization extends PApplet {
 		if (time - 1000 > lastFpsOut) {
 			// We should repaint the FPS count and other miscellaneous text
 			fill(255);
-			rect(5, 0, WIDTH, 59);
+			rect(5, 0, WIDTH, TEXT_HEIGHT);
 			fill(0);
 			textSize(16);
 			textAlign(TOP, LEFT);
 			text("v" + VERSION + ", FPS: " + (int)fps, 5, 5, WIDTH, 23);
 			text("Sorting algorithms: (s)election  (i)nsertion  (m)erge  recursive m(e)rge  (b)ogo", 5, 23, WIDTH, 41);
-			text("Miscellaneous: (n)ew  (f)lip  (c)heck  (1-9) pause length  (a)bout", 5, 41, WIDTH, 59);
+			text("Miscellaneous: (n)ew  (f)lip  (c)heck  (1-9) pause length  (a)bout", 5, 41, WIDTH, TEXT_HEIGHT);
 			// Reset the FPS count and set the last FPS out time to now
 			fps = 0;
 			lastFpsOut = time;
