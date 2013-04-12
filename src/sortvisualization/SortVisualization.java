@@ -1,11 +1,11 @@
 package sortvisualization;
 
 import java.util.ArrayList;
+import java.util.Random;
 import javax.swing.JOptionPane;
-import processing.core.*;
+import javax.swing.Timer;
 
-@SuppressWarnings("serial")
-public class SortVisualization extends PApplet {
+public class SortVisualization {
 
 	// Anybody should be able to adjust the array length and height
 	private static final int ARRAY_LENGTH = 100;
@@ -18,12 +18,12 @@ public class SortVisualization extends PApplet {
 	private static final int TEXT_HEIGHT = 59;
 	private static final int MIN = (int)(HEIGHT * 0.1);
 	private static final int MAX = (int)((HEIGHT - TEXT_HEIGHT) * 0.9);
-	private static final String VERSION = "0.1.3";
+	private static final String VERSION = "0.2.0";
 
 	// Make a spot for an array
-	private Number[] array = new Number[ARRAY_LENGTH];
+	private static Number[] array = new Number[ARRAY_LENGTH];
 	// Lets keep track of when we are sorting
-	private boolean running = false;
+	private static boolean running = false;
 
 	// Lists to keep track of what needs to be highlighted or dehighlighted
 	private ArrayList<Integer> highlighted = new ArrayList<Integer>();
@@ -32,17 +32,30 @@ public class SortVisualization extends PApplet {
 	// Counter for frames per second and the last time we showed it
 	private double fps = 0;
 	private long lastFpsOut = 0;
+	
+	static Random r = new Random();
+	
+	private static Window window;
+	private static Canvas canvas;
 
 	public static void main(String args[]) {
-		PApplet.main("sortvisualization.SortVisualization", args);
+		newArray();
+		window = new Window();		
+		canvas = new Canvas();
+		window.add(canvas);
+		window.setSize(canvas.getWidth(), canvas.getHeight());
+		window.setVisible(true);	
+		
+		
+		//canvas.paintComponent(canvas.getGraphics());
+	}
+	
+	public static Number[] getArray() {
+		return array;
 	}
 
-	@Override
+	/*@Override
 	public void setup() {
-		// Set the size, background, stroke, fill, text settings, and sound length
-		size(WIDTH, HEIGHT);
-		smooth();
-		background(255);
 		stroke(255);
 		fill(0);
 		textSize(16);
@@ -136,74 +149,76 @@ public class SortVisualization extends PApplet {
 				}
 			}
 		}
-	}
+	}*/
 
-	@Override
-	public void keyReleased() {
-		// If it was a number key, switch the running speed
-		switch (key) {
-			case 'a':
-				thread("about");
-				break;
-			case '1':
-			case '2':
-			case '3':
-			case '4':
-			case '5':
-			case '6':
-			case '7':
-			case '8':
-			case '9':
-				AudioEngine.setLength(Integer.parseInt(key + "") * 10);
-		}
-
-		// Everything else only works if you are not running
-		if (running)
-			return;
-
-		// We are running now
-		running = true;
-		switch (key) {
-			case 's':
-				thread("selectionSort");
-				break;
-			case 'i':
-				thread("insertionSort");
-				break;
-			case 'e':
-				thread("mergeSortRecursive");
-				break;
-			case 'b':
-				thread("bogoSort");
-				break;
-			case 'm':
-				thread("mergeSort");
-				break;
-			case 'c':
-				thread("isSorted");
-				break;
-			case 'n':
-				newArray();
-				break;
-			case 'f':
-				flipArray();
-				break;
-			default:
-				running = false;
-		}
-	}
+//	@Override
+//	public void keyReleased() {
+//		// If it was a number key, switch the running speed
+//		switch (key) {
+//			case 'a':
+//				thread("about");
+//				break;
+//			case '1':
+//			case '2':
+//			case '3':
+//			case '4':
+//			case '5':
+//			case '6':
+//			case '7':
+//			case '8':
+//			case '9':
+//				AudioEngine.setLength(Integer.parseInt(key + "") * 10);
+//		}
+//
+//		// Everything else only works if you are not running
+//		if (running)
+//			return;
+//
+//		// We are running now
+//		running = true;
+//		switch (key) {
+//			case 's':
+//				Sort s = new Sort();
+//				Thread t = new Thread(s);
+//				t.start();
+//				break;
+//			case 'i':
+//				thread("insertionSort");
+//				break;
+//			case 'e':
+//				thread("mergeSortRecursive");
+//				break;
+//			case 'b':
+//				thread("bogoSort");
+//				break;
+//			case 'm':
+//				thread("mergeSort");
+//				break;
+//			case 'c':
+//				thread("isSorted");
+//				break;
+//			case 'n':
+//				newArray();
+//				break;
+//			case 'f':
+//				flipArray();
+//				break;
+//			default:
+//				running = false;
+//		}
+//	}
 
 	public void about() {
-		JOptionPane.showMessageDialog(this, "SortVisualization is a project designed" + System.lineSeparator() + 
+		JOptionPane.showMessageDialog(canvas, "SortVisualization is a project designed" + System.lineSeparator() + 
 				"for educational purposes. It was made by" + System.lineSeparator() + 
 				"Kevin Breslin who is a student at" + System.lineSeparator() + 
 				"Suffolk County Community College in" + System.lineSeparator() + 
 				"Selden, New York. Version " + VERSION + ".", "About", JOptionPane.INFORMATION_MESSAGE);
 	}
 
-	private void newArray() {
+	private static void newArray() {
 		for (int i = 0; i < array.length; ++i)
-			array[i] = new Number((int)random(MIN, MAX));
+			array[i] = new Number(r.nextInt(MAX - MIN) + MIN);
 		running = false;
 	}
 
@@ -354,7 +369,7 @@ public class SortVisualization extends PApplet {
 	public void bogoSort() {
 		while (!isSorted(true))
 			for (int i = 0; i < array.length; ++i)
-				swap(i, (int)random(0, array.length));
+				swap(i, (int)r.nextInt(array.length));
 		this.isSorted();
 	}
 
