@@ -1,32 +1,26 @@
 package sortvisualization;
 
-public class Sort implements Runnable {
+public abstract class Sort implements Runnable {
 	
-	Number[] array;
+	private Number[] array;
 
-	public Sort() {
-		// TODO Auto-generated constructor stub
+	public Sort(Number[] array) {
+		this.array = array;
 	}
 
 	@Override
-	public void run() {
-		// TODO Auto-generated method stub
-		array = SortVisualization.getArray();
+	public abstract void run();
+
+	protected boolean isSorted() {
 		if (array.length <= 1)
-			return;
-		for (int i = 0; i < array.length; ++i) {
-			Number valueToInsert = array[i];
-			int holePos = i;
-			while (holePos > 0 && array[holePos].lt(array[holePos - 1])) {
-				swap(holePos, holePos - 1);
-				--holePos;
-			}
-			array[holePos] = valueToInsert;
-			array[holePos].dirty();
-		}
+			return true;
+		for (int i = 1; i < array.length; ++i)
+			if (array[i].lt(array[i - 1]))
+				return false;
+		return true;
 	}
 	
-	private void swap(int a, int b) {
+	protected void swap(int a, int b) {
 		array[a].dirty();
 		array[b].dirty();
 		Number temp = array[a];

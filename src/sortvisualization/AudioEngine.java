@@ -2,28 +2,25 @@ package sortvisualization;
 
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.FloatControl;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.SourceDataLine;
 
 public final class AudioEngine {
 
 	private static final int SAMPLE_RATE = 44000;
+	private static final AudioFormat af = new AudioFormat(SAMPLE_RATE, 16, 1, true, true);
 
 	private static SourceDataLine line;
 	private static int length = 10;
 
 	static {
-		final AudioFormat af = new AudioFormat(SAMPLE_RATE, 16, 1, true, true);
 		try {
 			line = AudioSystem.getSourceDataLine(af);
-			line.open(af);
+			line.open(af, 4400);
 		} catch (LineUnavailableException e) {
 			e.printStackTrace();
 		}
 		line.start();
-		FloatControl gainControl = (FloatControl)line.getControl(FloatControl.Type.MASTER_GAIN);
-		gainControl.setValue(-20.0f);
 	}
 
 	private static byte[] generateSineWavefreq(int freq) {
@@ -40,9 +37,19 @@ public final class AudioEngine {
 	public static void play(Number num, Number num2) {
 		byte[] arr = AudioEngine.generateSineWavefreq(num.getValue());
 		byte[] arr2 = AudioEngine.generateSineWavefreq(num2.getValue());
-		line.write(arr, 0, arr.length);
-		line.write(arr2, 0, arr2.length);
-		line.drain();
+		try {
+			line.write(arr, 0, arr.length);
+			line.write(arr2, 0, arr2.length);
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+			try {
+				Thread.sleep(AudioEngine.getLength());
+			} catch (InterruptedException e2) {
+				e2.printStackTrace();
+			}
+		}
+		if (line.available() >= 4400)
+			line.drain();
 	}
 	
 	public static int getLength() {
@@ -50,7 +57,15 @@ public final class AudioEngine {
 	}
 
 	public static void setLength(int length) {
+		if (length < 10)
+			length = 10;
+		else if (length > 1000)
+			length = 1000;
 		AudioEngine.length = length;
+	}
+	
+	public static void nop() {
+		return;
 	}
 
 }
