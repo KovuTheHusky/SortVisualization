@@ -1,6 +1,5 @@
 package sortvisualization;
 
-import java.awt.Component;
 import java.awt.Event;
 import java.awt.GraphicsConfiguration;
 import java.awt.HeadlessException;
@@ -8,29 +7,28 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.HashMap;
 
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 
 @SuppressWarnings("serial")
 public class Window extends JFrame implements ActionListener {
 	
 	private final static int MODIFIER = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
-	private static boolean running = false;
+	private static boolean busy = false;
 
 	HashMap<String, JMenuItem> items = new HashMap<String, JMenuItem>();
 	
 	public Window() throws HeadlessException {
 		super();
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-				
 		this.setTitle("SortVisualization");
-		
 		
 		JMenuBar menu = new JMenuBar();
 		JMenu file = new JMenu("File");
@@ -42,10 +40,6 @@ public class Window extends JFrame implements ActionListener {
 		close.addActionListener(this);
 		close.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_W, MODIFIER));
 		file.add(close);
-		JMenuItem about = new JMenuItem("About");
-		about.addActionListener(this);
-		about.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, MODIFIER));
-		file.add(about);
 		menu.add(file);
 		JMenu edit = new JMenu("Edit");
 		JMenuItem incSpeed = new JMenuItem("Increase Speed");
@@ -87,6 +81,16 @@ public class Window extends JFrame implements ActionListener {
 		sort.add(bogo);
 		menu.add(sort);
 		JMenu help = new JMenu("Help");
+		JMenuItem about = new JMenuItem("About...");
+		about.addActionListener(this);
+		//about.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, MODIFIER));
+		items.put("About...", about);
+		help.add(about);
+		JMenuItem license = new JMenuItem("License...");
+		license.addActionListener(this);
+		//license.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, MODIFIER));
+		items.put("License", license);
+		help.add(license);
 		menu.add(help);
 		this.setJMenuBar(menu);
 	}
@@ -108,23 +112,23 @@ public class Window extends JFrame implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+				
 		switch(e.getActionCommand()) {
-			case "New":
-				new Thread(new Randomize(SortVisualization.getArray().length, 60, 540)).start();
-				break;
 			case "Close":
 				System.exit(0);
-			case "About":
-				new Thread(new Runnable() { public void run() {
-					JOptionPane.showMessageDialog((Component)Window.getWindows()[0],
-							"SortVisualization is a project designed" + System.lineSeparator() +
-							"for educational purposes. It was made by" + System.lineSeparator() + 
-							"Kevin Breslin who is a student at" + System.lineSeparator() + 
-							"Suffolk County Community College in" + System.lineSeparator() + 
-							"Selden, New York. Version 0.2.0.",
-							"About", JOptionPane.INFORMATION_MESSAGE); } }).start();
+			case "About...":
+				try {
+					java.awt.Desktop.getDesktop().browse(SortVisualization.class.getClassLoader().getResource("about.html").toURI());
+				} catch (IOException | URISyntaxException e2) {
+					e2.printStackTrace();
+				}
+			case "License...":
+				try {
+					java.awt.Desktop.getDesktop().browse(SortVisualization.class.getClassLoader().getResource("license.html").toURI());
+				} catch (IOException | URISyntaxException e2) {
+					e2.printStackTrace();
+				}
 				break;
-				
 			case "Increase Speed":
 				AudioEngine.setLength(AudioEngine.getLength() - 10);
 				if (AudioEngine.getLength() <= 10)
@@ -146,37 +150,46 @@ public class Window extends JFrame implements ActionListener {
 				else if (AudioEngine.getLength() >= 1000)
 					items.get("Decrease Speed").setEnabled(false);
 				break;
-				
+		}
+		
+		if (Window.isBusy())
+			return;
+		
+		switch(e.getActionCommand()) {
+			case "New":
+				new Thread(new Randomize(SortVisualization.getArray().length, 60, 540)).start();
+				break;
 			case "Selection":
-				Window.running = true;
+				Window.setBusy(true);
 				new Thread(new SelectionSort(SortVisualization.getArray())).start();
 				break;
 			case "Insertion":
-				Window.running = true;
+				Window.setBusy(true);
 				new Thread(new InsertionSort(SortVisualization.getArray())).start();
 				break;
 			case "Iterative Merge":
-				Window.running = true;
+				Window.setBusy(true);
 				new Thread(new MergeSort(SortVisualization.getArray())).start();
 				break;
 			case "Recursive Merge":
-				Window.running = true;
+				Window.setBusy(true);
 				new Thread(new RecursiveMergeSort(SortVisualization.getArray())).start();
 				break;
 			case "Bogo":
-				Window.running = true;
+				Window.setBusy(true);
 				new Thread(new BogoSort(SortVisualization.getArray())).start();
 				break;
 		}
 			
 	}
 	
-	public static boolean isRunning() {
-		return Window.running;
+	public static boolean isBusy() {
+		return Window.busy;
 	}
 	
-	public static void setRunning(boolean running) {
-		Window.running = running;
+	public static void setBusy(boolean busy) {
+		
+		Window.busy = busy;
 	}
 
 }

@@ -12,7 +12,7 @@ public class RecursiveMergeSort extends Sort {
 	@Override
 	public void run() {
 		mergeSortRecursive(array, 0, array.length);
-		Window.setRunning(false);
+		Window.setBusy(false);
 	}
 	
 	private void mergeSortRecursive(Number[] array, int start, int end) {

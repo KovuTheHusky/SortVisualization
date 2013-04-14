@@ -23,7 +23,7 @@ public class SelectionSort extends Sort {
 			if (min != i)
 				swap(i, min);
 		}
-		Window.setRunning(false);
+		Window.setBusy(false);
 	}
 
 }

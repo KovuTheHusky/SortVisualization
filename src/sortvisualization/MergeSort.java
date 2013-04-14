@@ -29,7 +29,7 @@ public class MergeSort extends Sort {
 				mergeArrays(array, startL, startL + step, startR, array.length);
 			step *= 2;
 		}
-		Window.setRunning(false);
+		Window.setBusy(false);
 	}
 	
 	private void mergeArrays(Number[] array, int startL, int stopL, int startR, int stopR) {

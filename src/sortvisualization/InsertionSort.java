@@ -24,7 +24,7 @@ public class InsertionSort extends Sort {
 			array[holePos] = valueToInsert;
 			array[holePos].dirty();
 		}
-		Window.setRunning(false);
+		Window.setBusy(false);
 	}
 	
 }

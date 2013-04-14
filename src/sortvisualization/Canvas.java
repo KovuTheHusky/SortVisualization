@@ -92,7 +92,7 @@ public class Canvas extends JPanel implements ActionListener {
 					lastFpsOut = time;
 				}
 
-				if (!Window.isRunning() && !highlighted.isEmpty())
+				if (!Window.isBusy() && !highlighted.isEmpty())
 					highlighted.clear();
 
 				toHighlight.clear();

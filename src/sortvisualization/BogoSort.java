@@ -17,7 +17,7 @@ public class BogoSort extends Sort {
 		while (!isSorted())
 			for (int i = 0; i < array.length; ++i)
 				swap(i, (int)r.nextInt(array.length));
-		Window.setRunning(false);
+		Window.setBusy(false);
 	}
 
 }
