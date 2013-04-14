@@ -1,5 +1,6 @@
 package sortvisualization;
 
+import java.awt.Desktop;
 import java.awt.Event;
 import java.awt.GraphicsConfiguration;
 import java.awt.HeadlessException;
@@ -7,8 +8,11 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.file.Files;
 import java.util.HashMap;
 
 import javax.swing.JFrame;
@@ -118,13 +122,29 @@ public class Window extends JFrame implements ActionListener {
 				System.exit(0);
 			case "About...":
 				try {
-					java.awt.Desktop.getDesktop().browse(SortVisualization.class.getClassLoader().getResource("about.html").toURI());
+					File compressed = new File(SortVisualization.class.getClassLoader().getResource("about.html").getFile());
+					File image = new File(SortVisualization.class.getClassLoader().getResource("icon128.png").getFile());
+					File temp = File.createTempFile("about", ".html");
+					File tempImage = File.createTempFile("about", ".html");
+					temp.deleteOnExit();
+					tempImage.deleteOnExit();
+					temp.delete();
+					tempImage.delete();
+					Files.copy(compressed.toPath(), temp.toPath());
+					Files.copy(image.toPath(), tempImage.toPath());
+					Desktop.getDesktop().browse(new URI("file://" + temp.getAbsolutePath()));
 				} catch (IOException | URISyntaxException e2) {
 					e2.printStackTrace();
 				}
+				break;
 			case "License...":
 				try {
-					java.awt.Desktop.getDesktop().browse(SortVisualization.class.getClassLoader().getResource("license.html").toURI());
+					File compressed = new File(SortVisualization.class.getClassLoader().getResource("license.html").getFile());
+					File temp = File.createTempFile("license", ".html");
+					temp.deleteOnExit();
+					temp.delete();
+					Files.copy(compressed.toPath(), temp.toPath());
+					Desktop.getDesktop().browse(new URI("file://" + temp.getAbsolutePath()));
 				} catch (IOException | URISyntaxException e2) {
 					e2.printStackTrace();
 				}
