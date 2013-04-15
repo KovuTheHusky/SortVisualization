@@ -80,7 +80,7 @@ public class Window extends JFrame implements ActionListener {
 		this.addMenuItem(sort, "Iterative Merge", KeyEvent.VK_S);
 		this.addMenuItem(sort, "Recursive Merge", KeyEvent.VK_M, Event.SHIFT_MASK);
 		this.addMenuItem(sort, "Bogo", KeyEvent.VK_B);
-		sort.add(new JMenuItem("-"));
+		sort.addSeparator();
 		this.addMenuItem(sort, "Is Sorted?");
 		bar.add(sort);
 		JMenu help = new JMenu("Help");
