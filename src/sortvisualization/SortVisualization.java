@@ -1,5 +1,7 @@
 package sortvisualization;
 
+import java.awt.BorderLayout;
+import java.awt.Container;
 import java.awt.Image;
 import java.util.ArrayList;
 
@@ -42,8 +44,12 @@ public class SortVisualization {
 		new Thread(new Randomize(ARRAY_LENGTH)).start();
 		window = new Window();
 		canvas = new Canvas();
-		window.add(canvas);
+		Container pane = window.getContentPane();
+		pane.setLayout(new BorderLayout());
+		pane.add(canvas, BorderLayout.CENTER);
 		window.setIconImages(icons);
+		window.pack();
+		window.setLocationRelativeTo(null);
 		window.setVisible(true);
 	}
 

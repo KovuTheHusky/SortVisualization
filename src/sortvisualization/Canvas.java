@@ -1,6 +1,7 @@
 package sortvisualization;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.LayoutManager;
@@ -28,32 +29,32 @@ public class Canvas extends JPanel implements ActionListener {
 
 	public Canvas() {
 		super();
-		this.setLocation(0, 0);
-		this.setSize(SortVisualization.getWidth(), SortVisualization.getHeight());
+		Dimension d = new Dimension(SortVisualization.getWidth(), SortVisualization.getHeight());
+		this.setPreferredSize(d);
 		timer = new Timer(16, this);
 		timer.start();
 	}
 
 	public Canvas(LayoutManager layout) {
 		super(layout);
-		this.setLocation(0, 0);
-		this.setSize(SortVisualization.getWidth(), SortVisualization.getHeight());
+		Dimension d = new Dimension(SortVisualization.getWidth(), SortVisualization.getHeight());
+		this.setPreferredSize(d);
 		timer = new Timer(16, this);
 		timer.start();
 	}
 
 	public Canvas(boolean isDoubleBuffered) {
 		super(isDoubleBuffered);
-		this.setLocation(0, 0);
-		this.setSize(SortVisualization.getWidth(), SortVisualization.getHeight());
+		Dimension d = new Dimension(SortVisualization.getWidth(), SortVisualization.getHeight());
+		this.setPreferredSize(d);
 		timer = new Timer(16, this);
 		timer.start();
 	}
 
 	public Canvas(LayoutManager layout, boolean isDoubleBuffered) {
 		super(layout, isDoubleBuffered);
-		this.setLocation(0, 0);
-		this.setSize(SortVisualization.getWidth(), SortVisualization.getHeight());
+		Dimension d = new Dimension(SortVisualization.getWidth(), SortVisualization.getHeight());
+		this.setPreferredSize(d);
 		timer = new Timer(16, this);
 		timer.start();
 	}

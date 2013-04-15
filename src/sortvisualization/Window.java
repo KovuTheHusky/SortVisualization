@@ -35,9 +35,7 @@ public class Window extends JFrame implements ActionListener {
 		super();
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setTitle("SortVisualization");
-		this.setSize(SortVisualization.getWidth(), SortVisualization.getHeight());
 		this.setResizable(false);
-		this.setLocationRelativeTo(null);
 		this.setupMenuBar();
 	}
 
@@ -45,9 +43,7 @@ public class Window extends JFrame implements ActionListener {
 		super(gc);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setTitle("SortVisualization");
-		this.setSize(SortVisualization.getWidth(), SortVisualization.getHeight());
 		this.setResizable(false);
-		this.setLocationRelativeTo(null);
 		this.setupMenuBar();
 	}
 
@@ -55,9 +51,7 @@ public class Window extends JFrame implements ActionListener {
 		super(title);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setTitle("SortVisualization");
-		this.setSize(SortVisualization.getWidth(), SortVisualization.getHeight());
 		this.setResizable(false);
-		this.setLocationRelativeTo(null);
 		this.setupMenuBar();
 	}
 
@@ -67,7 +61,6 @@ public class Window extends JFrame implements ActionListener {
 		this.setTitle("SortVisualization");
 		this.setSize(SortVisualization.getWidth(), SortVisualization.getHeight());
 		this.setResizable(false);
-		this.setLocationRelativeTo(null);
 		this.setupMenuBar();
 	}
 	
@@ -148,8 +141,8 @@ public class Window extends JFrame implements ActionListener {
 						fw.write(scanner.nextLine());
 					scanner.close();
 					fw.close();
-					Desktop.getDesktop().browse(new URI("file://" + temp.getAbsolutePath()));
-				} catch (IOException | URISyntaxException ex) {
+					Desktop.getDesktop().browse(temp.toURI());
+				} catch (IOException ex) {
 					ex.printStackTrace();
 				}
 				break;
