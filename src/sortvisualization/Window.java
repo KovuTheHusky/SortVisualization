@@ -36,6 +36,7 @@ public class Window extends JFrame implements ActionListener {
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setTitle("SortVisualization");
 		this.setSize(SortVisualization.getWidth(), SortVisualization.getHeight());
+		this.setResizable(false);
 		this.setLocationRelativeTo(null);
 		this.setupMenuBar();
 	}
@@ -45,6 +46,7 @@ public class Window extends JFrame implements ActionListener {
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setTitle("SortVisualization");
 		this.setSize(SortVisualization.getWidth(), SortVisualization.getHeight());
+		this.setResizable(false);
 		this.setLocationRelativeTo(null);
 		this.setupMenuBar();
 	}
@@ -54,6 +56,7 @@ public class Window extends JFrame implements ActionListener {
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setTitle("SortVisualization");
 		this.setSize(SortVisualization.getWidth(), SortVisualization.getHeight());
+		this.setResizable(false);
 		this.setLocationRelativeTo(null);
 		this.setupMenuBar();
 	}
@@ -63,6 +66,7 @@ public class Window extends JFrame implements ActionListener {
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setTitle("SortVisualization");
 		this.setSize(SortVisualization.getWidth(), SortVisualization.getHeight());
+		this.setResizable(false);
 		this.setLocationRelativeTo(null);
 		this.setupMenuBar();
 	}
