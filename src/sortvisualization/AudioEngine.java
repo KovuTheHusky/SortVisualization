@@ -40,12 +40,12 @@ public final class AudioEngine {
 		try {
 			line.write(arr, 0, arr.length);
 			line.write(arr2, 0, arr2.length);
-		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
+		} catch (IllegalArgumentException ex) {
+			ex.printStackTrace();
 			try {
 				Thread.sleep(AudioEngine.getLength());
-			} catch (InterruptedException e2) {
-				e2.printStackTrace();
+			} catch (InterruptedException ex2) {
+				ex2.printStackTrace();
 			}
 		}
 		if (line.available() >= 4400)

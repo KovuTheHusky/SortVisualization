@@ -9,11 +9,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.nio.file.Files;
 import java.util.HashMap;
+import java.util.Scanner;
 
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -27,91 +29,91 @@ public class Window extends JFrame implements ActionListener {
 	private final static int MODIFIER = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
 	private static boolean busy = false;
 
-	HashMap<String, JMenuItem> items = new HashMap<String, JMenuItem>();
+	private static HashMap<String, JMenuItem> items = new HashMap<String, JMenuItem>();
 	
 	public Window() throws HeadlessException {
 		super();
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setTitle("SortVisualization");
-		
-		JMenuBar menu = new JMenuBar();
-		JMenu file = new JMenu("File");
-		JMenuItem newArray = new JMenuItem("New");
-		newArray.addActionListener(this);
-		newArray.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, MODIFIER));
-		file.add(newArray);
-		JMenuItem close = new JMenuItem("Close");
-		close.addActionListener(this);
-		close.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_W, MODIFIER));
-		file.add(close);
-		menu.add(file);
-		JMenu edit = new JMenu("Edit");
-		JMenuItem incSpeed = new JMenuItem("Increase Speed");
-		incSpeed.addActionListener(this);
-		incSpeed.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_EQUALS, MODIFIER));
-		incSpeed.setEnabled(false);
-		edit.add(incSpeed);
-		items.put("Increase Speed", incSpeed);
-		JMenuItem decSpeed = new JMenuItem("Decrease Speed");
-		decSpeed.addActionListener(this);
-		decSpeed.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_MINUS, MODIFIER));
-		edit.add(decSpeed);
-		items.put("Decrease Speed", decSpeed);
-		JMenuItem resetSpeed = new JMenuItem("Reset Speed");
-		resetSpeed.addActionListener(this);
-		resetSpeed.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_0, MODIFIER));
-		edit.add(resetSpeed);
-		menu.add(edit);
-		JMenu sort = new JMenu("Sort");
-		JMenuItem selection = new JMenuItem("Selection");
-		selection.addActionListener(this);
-		selection.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, MODIFIER));
-		sort.add(selection);
-		JMenuItem insertion = new JMenuItem("Insertion");
-		insertion.addActionListener(this);
-		insertion.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_I, MODIFIER));
-		sort.add(insertion);
-		JMenuItem merge = new JMenuItem("Iterative Merge");
-		merge.addActionListener(this);
-		merge.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_M, MODIFIER));
-		sort.add(merge);
-		JMenuItem merge2 = new JMenuItem("Recursive Merge");
-		merge2.addActionListener(this);
-		merge2.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_M, MODIFIER + Event.SHIFT_MASK));
-		sort.add(merge2);
-		JMenuItem bogo = new JMenuItem("Bogo");
-		bogo.addActionListener(this);
-		bogo.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_B, MODIFIER));
-		sort.add(bogo);
-		menu.add(sort);
-		JMenu help = new JMenu("Help");
-		JMenuItem about = new JMenuItem("About...");
-		about.addActionListener(this);
-		//about.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, MODIFIER));
-		items.put("About...", about);
-		help.add(about);
-		JMenuItem license = new JMenuItem("License...");
-		license.addActionListener(this);
-		//license.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, MODIFIER));
-		items.put("License", license);
-		help.add(license);
-		menu.add(help);
-		this.setJMenuBar(menu);
+		this.setSize(SortVisualization.getWidth(), SortVisualization.getHeight());
+		this.setupMenuBar();
 	}
 
 	public Window(GraphicsConfiguration gc) {
 		super(gc);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setTitle("SortVisualization");
+		this.setSize(SortVisualization.getWidth(), SortVisualization.getHeight());
+		this.setupMenuBar();
 	}
 
 	public Window(String title) throws HeadlessException {
 		super(title);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setTitle("SortVisualization");
+		this.setSize(SortVisualization.getWidth(), SortVisualization.getHeight());
+		this.setupMenuBar();
 	}
 
 	public Window(String title, GraphicsConfiguration gc) {
 		super(title, gc);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setTitle("SortVisualization");
+		this.setSize(SortVisualization.getWidth(), SortVisualization.getHeight());
+		this.setupMenuBar();
+	}
+	
+	private void setupMenuBar() {
+		JMenuBar bar = new JMenuBar();
+		JMenu file = new JMenu("File");
+		this.addMenuItem(file, "New", KeyEvent.VK_N);
+		this.addMenuItem(file, "Close", KeyEvent.VK_W);
+		bar.add(file);
+		JMenu edit = new JMenu("Edit");
+		this.addMenuItem(edit, "Increase Speed", KeyEvent.VK_EQUALS).setEnabled(false);
+		this.addMenuItem(edit, "Decrease Speed", KeyEvent.VK_MINUS);
+		this.addMenuItem(edit, "Reset Speed", KeyEvent.VK_0);
+		bar.add(edit);
+		JMenu sort = new JMenu("Sort");
+		this.addMenuItem(sort, "Selection", KeyEvent.VK_S);
+		this.addMenuItem(sort, "Insertion", KeyEvent.VK_I);
+		this.addMenuItem(sort, "Iterative Merge", KeyEvent.VK_S);
+		this.addMenuItem(sort, "Recursive Merge", KeyEvent.VK_M, Event.SHIFT_MASK);
+		this.addMenuItem(sort, "Bogo", KeyEvent.VK_B);
+		sort.add(new JMenuItem("-"));
+		this.addMenuItem(sort, "Is Sorted?");
+		bar.add(sort);
+		JMenu help = new JMenu("Help");
+		this.addMenuItem(help, "About...");
+		this.addMenuItem(help, "License...");
+		bar.add(help);
+		this.setJMenuBar(bar);
+	}
+	
+	private JMenuItem addMenuItem(JMenu parent, String name) {
+		JMenuItem jmi = new JMenuItem(name);
+		jmi.addActionListener(this);
+		parent.add(jmi);
+		items.put(name, jmi);
+		return jmi;
+	}
+	
+	private JMenuItem addMenuItem(JMenu parent, String name, int key) {
+		JMenuItem jmi = new JMenuItem(name);
+		jmi.addActionListener(this);
+		jmi.setAccelerator(KeyStroke.getKeyStroke(key, MODIFIER));
+		parent.add(jmi);
+		items.put(name, jmi);
+		return jmi;
+	}
+	
+	private JMenuItem addMenuItem(JMenu parent, String name, int key, int mod) {
+		JMenuItem jmi = new JMenuItem(name);
+		jmi.addActionListener(this);
+		jmi.setAccelerator(KeyStroke.getKeyStroke(key, MODIFIER + mod));
+		parent.add(jmi);
+		items.put(name, jmi);
+		return jmi;
 	}
 
 	@Override
@@ -122,31 +124,25 @@ public class Window extends JFrame implements ActionListener {
 				System.exit(0);
 			case "About...":
 				try {
-					File compressed = new File(SortVisualization.class.getClassLoader().getResource("about.html").getFile());
-					File image = new File(SortVisualization.class.getClassLoader().getResource("icon128.png").getFile());
-					File temp = File.createTempFile("about", ".html");
-					File tempImage = File.createTempFile("about", ".html");
-					temp.deleteOnExit();
-					tempImage.deleteOnExit();
-					temp.delete();
-					tempImage.delete();
-					Files.copy(compressed.toPath(), temp.toPath());
-					Files.copy(image.toPath(), tempImage.toPath());
-					Desktop.getDesktop().browse(new URI("file://" + temp.getAbsolutePath()));
-				} catch (IOException | URISyntaxException e2) {
-					e2.printStackTrace();
+					Desktop.getDesktop().browse(new URI("http://codeski.com/sortvisualization"));
+				} catch (IOException | URISyntaxException ex) {
+					ex.printStackTrace();
 				}
 				break;
 			case "License...":
 				try {
-					File compressed = new File(SortVisualization.class.getClassLoader().getResource("license.html").getFile());
 					File temp = File.createTempFile("license", ".html");
 					temp.deleteOnExit();
-					temp.delete();
-					Files.copy(compressed.toPath(), temp.toPath());
+					FileWriter fw = new FileWriter(temp);
+					InputStream in = getClass().getClassLoader().getResourceAsStream("license.html");
+					Scanner scanner = new Scanner(in);
+					while(scanner.hasNextLine())
+						fw.write(scanner.nextLine());
+					scanner.close();
+					fw.close();
 					Desktop.getDesktop().browse(new URI("file://" + temp.getAbsolutePath()));
-				} catch (IOException | URISyntaxException e2) {
-					e2.printStackTrace();
+				} catch (IOException | URISyntaxException ex) {
+					ex.printStackTrace();
 				}
 				break;
 			case "Increase Speed":
@@ -177,7 +173,7 @@ public class Window extends JFrame implements ActionListener {
 		
 		switch(e.getActionCommand()) {
 			case "New":
-				new Thread(new Randomize(SortVisualization.getArray().length, 60, 540)).start();
+				new Thread(new Randomize(SortVisualization.getArray().length)).start();
 				break;
 			case "Selection":
 				Window.setBusy(true);
@@ -199,6 +195,17 @@ public class Window extends JFrame implements ActionListener {
 				Window.setBusy(true);
 				new Thread(new BogoSort(SortVisualization.getArray())).start();
 				break;
+			case "Is Sorted?":
+				Window.setBusy(true);
+				new Thread(new Runnable() { public void run() {
+					Number[] arr = SortVisualization.getArray();
+					for (int i = 1; i < arr.length; ++i)
+						if (arr[i - 1].gt(arr[i])) {
+							Window.setBusy(false);
+							break;
+						}
+					Window.setBusy(false);
+				} }).start();
 		}
 			
 	}
@@ -208,7 +215,13 @@ public class Window extends JFrame implements ActionListener {
 	}
 	
 	public static void setBusy(boolean busy) {
-		
+		items.get("New").setEnabled(!busy);
+		items.get("Selection").setEnabled(!busy);
+		items.get("Insertion").setEnabled(!busy);
+		items.get("Iterative Merge").setEnabled(!busy);
+		items.get("Recursive Merge").setEnabled(!busy);
+		items.get("Bogo").setEnabled(!busy);
+		items.get("Is Sorted?").setEnabled(!busy);
 		Window.busy = busy;
 	}
 

@@ -1,6 +1,7 @@
 package sortvisualization;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
@@ -13,18 +14,9 @@ import javax.swing.Timer;
 @SuppressWarnings("serial")
 public class Canvas extends JPanel implements ActionListener {
 	
-	private static final int ARRAY_LENGTH = 100;
-	private static int HEIGHT = 600;
 
-	@SuppressWarnings("unused")
-	private static int WIDTH = ARRAY_LENGTH > 200 ? ARRAY_LENGTH * 4 + 1 : 801;
-	private static int BAR_WIDTH = WIDTH / ARRAY_LENGTH - 1;
-	//private static final int TEXT_HEIGHT = 59;
-	//private static final int MIN = (int)(HEIGHT * 0.1);
-	//private static final int MAX = (int)((HEIGHT - TEXT_HEIGHT) * 0.9);
+	private static int BAR_WIDTH = SortVisualization.getWidth() / SortVisualization.getArray().length - 1;
 		
-	private boolean running = false;
-
 	private ArrayList<Integer> highlighted = new ArrayList<Integer>();
 	private ArrayList<Integer> toHighlight = new ArrayList<Integer>();
 	
@@ -33,19 +25,11 @@ public class Canvas extends JPanel implements ActionListener {
 	private long lastFpsOut;
 	
 	private Timer timer;
-	
-	public void setRunning(boolean running) {
-		this.running = running;
-	}
-	
-	public boolean getRunning() {
-		return this.running;
-	}
 
 	public Canvas() {
 		super();
 		this.setLocation(0, 0);
-		this.setSize(WIDTH, HEIGHT);
+		this.setSize(SortVisualization.getWidth(), SortVisualization.getHeight());
 		timer = new Timer(16, this);
 		timer.start();
 	}
@@ -53,7 +37,7 @@ public class Canvas extends JPanel implements ActionListener {
 	public Canvas(LayoutManager layout) {
 		super(layout);
 		this.setLocation(0, 0);
-		this.setSize(WIDTH, HEIGHT);
+		this.setSize(SortVisualization.getWidth(), SortVisualization.getHeight());
 		timer = new Timer(16, this);
 		timer.start();
 	}
@@ -61,7 +45,7 @@ public class Canvas extends JPanel implements ActionListener {
 	public Canvas(boolean isDoubleBuffered) {
 		super(isDoubleBuffered);
 		this.setLocation(0, 0);
-		this.setSize(WIDTH, HEIGHT);
+		this.setSize(SortVisualization.getWidth(), SortVisualization.getHeight());
 		timer = new Timer(16, this);
 		timer.start();
 	}
@@ -69,7 +53,7 @@ public class Canvas extends JPanel implements ActionListener {
 	public Canvas(LayoutManager layout, boolean isDoubleBuffered) {
 		super(layout, isDoubleBuffered);
 		this.setLocation(0, 0);
-		this.setSize(WIDTH, HEIGHT);
+		this.setSize(SortVisualization.getWidth(), SortVisualization.getHeight());
 		timer = new Timer(16, this);
 		timer.start();
 	}
@@ -81,7 +65,9 @@ public class Canvas extends JPanel implements ActionListener {
 				
 		g.setColor(Color.BLACK);
 		
-		g.drawString("FPS: " + (int)lastFps + " Speed: " + AudioEngine.getLength(), 5, 15);
+		g.setFont(Font.decode("arial-plain-10"));
+		
+		g.drawString(lastFps + "", 5, 12);
 		
 				++fps;
 				long time = System.currentTimeMillis();
@@ -123,7 +109,7 @@ public class Canvas extends JPanel implements ActionListener {
 						g.setColor(Color.BLACK);
 					else
 						g.setColor(Color.BLUE);
-					g.fillRect(i * BAR_WIDTH + i + 1, HEIGHT - array[i].getValue(), BAR_WIDTH, array[i].getValue());
+					g.fillRect(i * BAR_WIDTH + i + 1, SortVisualization.getHeight() - array[i].getValue(), BAR_WIDTH, array[i].getValue());
 				}
 				
 	}

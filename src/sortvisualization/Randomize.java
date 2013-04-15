@@ -8,10 +8,10 @@ public class Randomize implements Runnable {
 	private int min;
 	private int max;
 
-	public Randomize(int length, int min, int max) {
+	public Randomize(int length) {
 		this.length = length;
-		this.min = min;
-		this.max = max;
+		this.min = SortVisualization.getMinimum();
+		this.max = SortVisualization.getMaximum();
 	}
 
 	@Override
