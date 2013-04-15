@@ -36,6 +36,7 @@ public class Window extends JFrame implements ActionListener {
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setTitle("SortVisualization");
 		this.setSize(SortVisualization.getWidth(), SortVisualization.getHeight());
+		this.setLocationRelativeTo(null);
 		this.setupMenuBar();
 	}
 
@@ -44,6 +45,7 @@ public class Window extends JFrame implements ActionListener {
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setTitle("SortVisualization");
 		this.setSize(SortVisualization.getWidth(), SortVisualization.getHeight());
+		this.setLocationRelativeTo(null);
 		this.setupMenuBar();
 	}
 
@@ -52,6 +54,7 @@ public class Window extends JFrame implements ActionListener {
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setTitle("SortVisualization");
 		this.setSize(SortVisualization.getWidth(), SortVisualization.getHeight());
+		this.setLocationRelativeTo(null);
 		this.setupMenuBar();
 	}
 
@@ -60,6 +63,7 @@ public class Window extends JFrame implements ActionListener {
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setTitle("SortVisualization");
 		this.setSize(SortVisualization.getWidth(), SortVisualization.getHeight());
+		this.setLocationRelativeTo(null);
 		this.setupMenuBar();
 	}
 	
@@ -77,7 +81,7 @@ public class Window extends JFrame implements ActionListener {
 		JMenu sort = new JMenu("Sort");
 		this.addMenuItem(sort, "Selection", KeyEvent.VK_S);
 		this.addMenuItem(sort, "Insertion", KeyEvent.VK_I);
-		this.addMenuItem(sort, "Iterative Merge", KeyEvent.VK_S);
+		this.addMenuItem(sort, "Iterative Merge", KeyEvent.VK_M);
 		this.addMenuItem(sort, "Recursive Merge", KeyEvent.VK_M, Event.SHIFT_MASK);
 		this.addMenuItem(sort, "Bogo", KeyEvent.VK_B);
 		sort.addSeparator();

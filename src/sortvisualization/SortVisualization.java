@@ -10,10 +10,10 @@ import javax.swing.UnsupportedLookAndFeelException;
 public class SortVisualization {
 
 	private static final int ARRAY_LENGTH = 100;
-	private static final int HEIGHT = 600;
 
 	@SuppressWarnings("unused")
 	private static final int WIDTH = ARRAY_LENGTH > 200 ? ARRAY_LENGTH * 4 + 1 : 801;
+	private static final int HEIGHT = WIDTH * 9 / 16;
 	private static final int MIN = (int)(HEIGHT * 0.1);
 	private static final int MAX = (int)(HEIGHT * 0.9);
 
