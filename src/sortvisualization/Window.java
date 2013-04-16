@@ -88,6 +88,7 @@ public class Window extends JFrame implements ActionListener {
 		JMenu help = new JMenu("Help");
 		this.addMenuItem(help, "About...");
 		this.addMenuItem(help, "License...");
+		this.addMenuItem(help, "Version");
 		bar.add(help);
 		this.setJMenuBar(bar);
 	}
@@ -146,6 +147,9 @@ public class Window extends JFrame implements ActionListener {
 				} catch (IOException ex) {
 					ex.printStackTrace();
 				}
+				break;
+			case "Version":
+				JOptionPane.showMessageDialog(null, "SortVisualization Version 0.2.0α");
 				break;
 			case "Increase Speed":
 				AudioEngine.setLength(AudioEngine.getLength() - 10);
