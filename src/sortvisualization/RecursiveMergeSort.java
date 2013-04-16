@@ -2,20 +2,18 @@ package sortvisualization;
 
 public class RecursiveMergeSort extends Sort {
 	
-	Number[] array;
 
-	public RecursiveMergeSort(Number[] array) {
-		super(array);
-		this.array = array;
+	public RecursiveMergeSort() {
+		super();
 	}
 
 	@Override
 	public void run() {
 		mergeSortRecursive(array, 0, array.length);
-		Window.setBusy(false);
 	}
 	
 	private void mergeSortRecursive(Number[] array, int start, int end) {
+		if (this.stop()) return;
 		if (end - start <= 1)
 			return;
 		int middle = start + (end - start) / 2;

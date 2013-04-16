@@ -2,16 +2,12 @@ package sortvisualization;
 
 public class MergeSort extends Sort {
 
-	Number[] array;
-
-	public MergeSort(Number[] array) {
-		super(array);
-		this.array = array;
+	public MergeSort() {
+		super();
 	}
 
 	@Override
 	public void run() {
-		Number[] array = this.array;
 		if (array.length < 2)
 			return;
 		int step = 1;
@@ -21,6 +17,7 @@ public class MergeSort extends Sort {
 			startL = 0;
 			startR = step;
 			while (startR + step <= array.length) {
+				if (this.stop()) return;
 				mergeArrays(array, startL, startL + step, startR, startR + step);
 				startL = startR + step;
 				startR = startL + step;
@@ -29,7 +26,6 @@ public class MergeSort extends Sort {
 				mergeArrays(array, startL, startL + step, startR, array.length);
 			step *= 2;
 		}
-		Window.setBusy(false);
 	}
 	
 	private void mergeArrays(Number[] array, int startL, int stopL, int startR, int stopR) {

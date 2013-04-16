@@ -2,10 +2,10 @@ package sortvisualization;
 
 public abstract class Sort implements Runnable {
 	
-	private Number[] array;
+	protected Number[] array;
 
-	public Sort(Number[] array) {
-		this.array = array;
+	public Sort() {
+		this.array = SortVisualization.getArray();
 	}
 
 	@Override
@@ -26,6 +26,12 @@ public abstract class Sort implements Runnable {
 		Number temp = array[a];
 		array[a] = array[b];
 		array[b] = temp;
+	}
+	
+	protected boolean stop() {
+		if (Window.isStopping())
+			Window.stop();
+		return Window.isStopping();
 	}
 
 }

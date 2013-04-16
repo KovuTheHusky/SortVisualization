@@ -23,12 +23,16 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
+import javax.swing.Timer;
 
 @SuppressWarnings("serial")
 public class Window extends JFrame implements ActionListener {
 	
 	private final static int MODIFIER = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
-	private static boolean busy = false;
+	private static Thread thread = null;
+	private static boolean isStopping = false;
+	
+	private Timer timer;
 
 	private static HashMap<String, JMenuItem> items = new HashMap<String, JMenuItem>();
 	
@@ -38,6 +42,8 @@ public class Window extends JFrame implements ActionListener {
 		this.setTitle("SortVisualization");
 		this.setResizable(false);
 		this.setupMenuBar();
+		timer = new Timer(16, this);
+		timer.start();
 	}
 
 	public Window(GraphicsConfiguration gc) {
@@ -84,6 +90,7 @@ public class Window extends JFrame implements ActionListener {
 		this.addMenuItem(sort, "Bogosort", KeyEvent.VK_B);
 		sort.addSeparator();
 		this.addMenuItem(sort, "Is Sorted?");
+		this.addMenuItem(sort, "Stop Sorting").setEnabled(false);
 		bar.add(sort);
 		JMenu help = new JMenu("Help");
 		this.addMenuItem(help, "About...");
@@ -121,6 +128,15 @@ public class Window extends JFrame implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		
+		if (e.getID() == 0) {
+			if (thread == null || !thread.isAlive()) {
+				thread = null;
+				setBusy(false);
+				isStopping = false;
+			}
+			return;
+		}
 				
 		switch(e.getActionCommand()) {
 			case "Close":
@@ -149,7 +165,7 @@ public class Window extends JFrame implements ActionListener {
 				}
 				break;
 			case "Version":
-				JOptionPane.showMessageDialog(null, "SortVisualization Version 0.2.0α");
+				JOptionPane.showMessageDialog(null, "SortVisualization Version 0.2.1α");
 				break;
 			case "Increase Speed":
 				AudioEngine.setLength(AudioEngine.getLength() - 10);
@@ -172,54 +188,57 @@ public class Window extends JFrame implements ActionListener {
 				else if (AudioEngine.getLength() >= 1000)
 					items.get("Decrease Speed").setEnabled(false);
 				break;
+				
+			case "Stop Sorting":
+				isStopping = true;
+				break;
 		}
 		
-		if (Window.isBusy())
+		if (isBusy())
 			return;
 		
 		switch(e.getActionCommand()) {
 			case "New":
-				new Thread(new Randomize(SortVisualization.getArray().length)).start();
+				setBusy(true);
+				(thread = new Thread(new Randomize(SortVisualization.getArray().length))).start();
 				break;
 			case "Selection Sort":
-				Window.setBusy(true);
-				new Thread(new SelectionSort(SortVisualization.getArray())).start();
+				setBusy(true);
+				(thread = new Thread(new SelectionSort())).start();
 				break;
 			case "Insertion Sort":
-				Window.setBusy(true);
-				new Thread(new InsertionSort(SortVisualization.getArray())).start();
+				setBusy(true);
+				(thread = new Thread(new InsertionSort())).start();
 				break;
 			case "Iterative Merge Sort":
-				Window.setBusy(true);
-				new Thread(new MergeSort(SortVisualization.getArray())).start();
+				setBusy(true);
+				(thread = new Thread(new MergeSort())).start();
 				break;
 			case "Recursive Merge Sort":
-				Window.setBusy(true);
-				new Thread(new RecursiveMergeSort(SortVisualization.getArray())).start();
+				setBusy(true);
+				(thread = new Thread(new RecursiveMergeSort())).start();
 				break;
 			case "Bogosort":
-				Window.setBusy(true);
-				new Thread(new BogoSort(SortVisualization.getArray())).start();
+				setBusy(true);
+				(thread = new Thread(new BogoSort())).start();
 				break;
 			case "Is Sorted?":
-				Window.setBusy(true);
-				new Thread(new Runnable() { public void run() {
+				setBusy(true);
+				(thread = new Thread(new Runnable() { public void run() {
 					Number[] arr = SortVisualization.getArray();
 					for (int i = 1; i < arr.length; ++i)
 						if (arr[i - 1].gt(arr[i])) {
-							Window.setBusy(false);
 							JOptionPane.showMessageDialog(null, "The array is not sorted.");
 							return;
 						}
-					Window.setBusy(false);
 					JOptionPane.showMessageDialog(null, "The array is sorted!");
-				} }).start();
+				} })).start();
 		}
 			
 	}
 	
 	public static boolean isBusy() {
-		return Window.busy;
+		return thread != null && thread.isAlive();
 	}
 	
 	public static void setBusy(boolean busy) {
@@ -230,7 +249,15 @@ public class Window extends JFrame implements ActionListener {
 		items.get("Recursive Merge Sort").setEnabled(!busy);
 		items.get("Bogosort").setEnabled(!busy);
 		items.get("Is Sorted?").setEnabled(!busy);
-		Window.busy = busy;
+		items.get("Stop Sorting").setEnabled(busy);
+	}
+	
+	public static boolean isStopping() {
+		return Window.isStopping;
+	}
+	
+	public static void stop() {
+		Window.thread = null;
 	}
 
 }
