@@ -13,7 +13,6 @@ public class RecursiveMergeSort extends Sort {
 	}
 	
 	private void mergeSortRecursive(Number[] array, int start, int end) {
-		if (this.stop()) return;
 		if (end - start <= 1)
 			return;
 		int middle = start + (end - start) / 2;
@@ -26,6 +25,7 @@ public class RecursiveMergeSort extends Sort {
 		Number[] merge = new Number[end - start];
 		int l = 0, r = 0, pos = 0;
 		while (l < middle - start && r < end - middle) {
+			if (this.stop()) return;
 			if (array[start + l].lt(array[middle + r]))
 				merge[pos++] = array[start + l++];
 			else
