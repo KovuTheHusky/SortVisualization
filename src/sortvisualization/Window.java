@@ -21,6 +21,7 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 
 @SuppressWarnings("serial")
@@ -76,11 +77,11 @@ public class Window extends JFrame implements ActionListener {
 		this.addMenuItem(edit, "Reset Speed", KeyEvent.VK_0);
 		bar.add(edit);
 		JMenu sort = new JMenu("Sort");
-		this.addMenuItem(sort, "Selection", KeyEvent.VK_S);
-		this.addMenuItem(sort, "Insertion", KeyEvent.VK_I);
-		this.addMenuItem(sort, "Iterative Merge", KeyEvent.VK_M);
-		this.addMenuItem(sort, "Recursive Merge", KeyEvent.VK_M, Event.SHIFT_MASK);
-		this.addMenuItem(sort, "Bogo", KeyEvent.VK_B);
+		this.addMenuItem(sort, "Selection Sort", KeyEvent.VK_S);
+		this.addMenuItem(sort, "Insertion Sort", KeyEvent.VK_I);
+		this.addMenuItem(sort, "Iterative Merge Sort", KeyEvent.VK_M);
+		this.addMenuItem(sort, "Recursive Merge Sort", KeyEvent.VK_M, Event.SHIFT_MASK);
+		this.addMenuItem(sort, "Bogosort", KeyEvent.VK_B);
 		sort.addSeparator();
 		this.addMenuItem(sort, "Is Sorted?");
 		bar.add(sort);
@@ -176,23 +177,23 @@ public class Window extends JFrame implements ActionListener {
 			case "New":
 				new Thread(new Randomize(SortVisualization.getArray().length)).start();
 				break;
-			case "Selection":
+			case "Selection Sort":
 				Window.setBusy(true);
 				new Thread(new SelectionSort(SortVisualization.getArray())).start();
 				break;
-			case "Insertion":
+			case "Insertion Sort":
 				Window.setBusy(true);
 				new Thread(new InsertionSort(SortVisualization.getArray())).start();
 				break;
-			case "Iterative Merge":
+			case "Iterative Merge Sort":
 				Window.setBusy(true);
 				new Thread(new MergeSort(SortVisualization.getArray())).start();
 				break;
-			case "Recursive Merge":
+			case "Recursive Merge Sort":
 				Window.setBusy(true);
 				new Thread(new RecursiveMergeSort(SortVisualization.getArray())).start();
 				break;
-			case "Bogo":
+			case "Bogosort":
 				Window.setBusy(true);
 				new Thread(new BogoSort(SortVisualization.getArray())).start();
 				break;
@@ -203,9 +204,11 @@ public class Window extends JFrame implements ActionListener {
 					for (int i = 1; i < arr.length; ++i)
 						if (arr[i - 1].gt(arr[i])) {
 							Window.setBusy(false);
-							break;
+							JOptionPane.showMessageDialog(null, "The array is not sorted.");
+							return;
 						}
 					Window.setBusy(false);
+					JOptionPane.showMessageDialog(null, "The array is sorted!");
 				} }).start();
 		}
 			
@@ -217,11 +220,11 @@ public class Window extends JFrame implements ActionListener {
 	
 	public static void setBusy(boolean busy) {
 		items.get("New").setEnabled(!busy);
-		items.get("Selection").setEnabled(!busy);
-		items.get("Insertion").setEnabled(!busy);
-		items.get("Iterative Merge").setEnabled(!busy);
-		items.get("Recursive Merge").setEnabled(!busy);
-		items.get("Bogo").setEnabled(!busy);
+		items.get("Selection Sort").setEnabled(!busy);
+		items.get("Insertion Sort").setEnabled(!busy);
+		items.get("Iterative Merge Sort").setEnabled(!busy);
+		items.get("Recursive Merge Sort").setEnabled(!busy);
+		items.get("Bogosort").setEnabled(!busy);
 		items.get("Is Sorted?").setEnabled(!busy);
 		Window.busy = busy;
 	}

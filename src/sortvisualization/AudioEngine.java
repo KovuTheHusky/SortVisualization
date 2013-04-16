@@ -35,8 +35,8 @@ public final class AudioEngine {
 	}
 
 	public static void play(Number num, Number num2) {
-		byte[] arr = AudioEngine.generateSineWavefreq(num.getValue());
-		byte[] arr2 = AudioEngine.generateSineWavefreq(num2.getValue());
+		byte[] arr = AudioEngine.generateSineWavefreq((int)(num.getValue() * 1.2));
+		byte[] arr2 = AudioEngine.generateSineWavefreq((int)(num2.getValue() * 1.2));
 		try {
 			line.write(arr, 0, arr.length);
 			line.write(arr2, 0, arr2.length);
