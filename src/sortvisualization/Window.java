@@ -1,5 +1,6 @@
 package sortvisualization;
 
+import java.awt.Color;
 import java.awt.Desktop;
 import java.awt.Event;
 import java.awt.GraphicsConfiguration;
@@ -17,6 +18,7 @@ import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Scanner;
 
+import javax.swing.JColorChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -81,6 +83,8 @@ public class Window extends JFrame implements ActionListener {
 		this.addMenuItem(edit, "Increase Speed", KeyEvent.VK_EQUALS).setEnabled(false);
 		this.addMenuItem(edit, "Decrease Speed", KeyEvent.VK_MINUS);
 		this.addMenuItem(edit, "Reset Speed", KeyEvent.VK_0);
+		edit.addSeparator();
+		this.addMenuItem(edit, "Highlight Color...");
 		bar.add(edit);
 		JMenu sort = new JMenu("Sort");
 		this.addMenuItem(sort, "Selection Sort", KeyEvent.VK_S);
@@ -188,7 +192,11 @@ public class Window extends JFrame implements ActionListener {
 				else if (AudioEngine.getLength() >= 1000)
 					items.get("Decrease Speed").setEnabled(false);
 				break;
-				
+			case "Highlight Color...":
+				Color c = JColorChooser.showDialog(this, "Highlight Color", Canvas.getColor());
+				if (c != null)
+					Canvas.setColor(c);
+				break;
 			case "Stop Sorting":
 				isStopping = true;
 				break;

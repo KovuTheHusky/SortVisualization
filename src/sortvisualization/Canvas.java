@@ -17,9 +17,10 @@ public class Canvas extends JPanel implements ActionListener {
 	
 
 	private static int BAR_WIDTH = SortVisualization.getWidth() / SortVisualization.getArray().length - 1;
-		
+	
 	private ArrayList<Integer> highlighted = new ArrayList<Integer>();
 	private ArrayList<Integer> toHighlight = new ArrayList<Integer>();
+	private static Color color = Color.BLUE;
 	
 	private int fps;
 	private int lastFps;
@@ -109,7 +110,7 @@ public class Canvas extends JPanel implements ActionListener {
 					if (!highlighted.contains(i))
 						g.setColor(Color.BLACK);
 					else
-						g.setColor(Color.BLUE);
+						g.setColor(Canvas.color);
 					g.fillRect(i * BAR_WIDTH + i + 1, SortVisualization.getHeight() - array[i].getValue(), BAR_WIDTH, array[i].getValue());
 				}
 				
@@ -118,6 +119,14 @@ public class Canvas extends JPanel implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		this.repaint();
+	}
+	
+	public static Color getColor() {
+		return Canvas.color;
+	}
+	
+	public static void setColor(Color color) {
+		Canvas.color = color;
 	}
 	
 }
