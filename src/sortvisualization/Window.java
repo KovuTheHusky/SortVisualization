@@ -169,7 +169,7 @@ public class Window extends JFrame implements ActionListener {
 				}
 				break;
 			case "Version":
-				JOptionPane.showMessageDialog(null, "SortVisualization Version 0.2.1α");
+				JOptionPane.showMessageDialog(this, "SortVisualization Version 0.2.1α");
 				break;
 			case "Increase Speed":
 				AudioEngine.setLength(AudioEngine.getLength() - 10);
