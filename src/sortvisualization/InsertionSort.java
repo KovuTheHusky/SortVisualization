@@ -1,10 +1,6 @@
 package sortvisualization;
 
 public class InsertionSort extends Sort {
-	
-	public InsertionSort() {
-		super();
-	}
 
 	@Override
 	public void run() {

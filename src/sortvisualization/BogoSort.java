@@ -4,11 +4,6 @@ import java.util.Random;
 
 public class BogoSort extends Sort {
 
-	
-	public BogoSort() {
-		super();
-	}
-
 	@Override
 	public void run() {
 		Random r = new Random();

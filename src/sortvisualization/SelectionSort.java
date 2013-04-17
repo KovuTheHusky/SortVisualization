@@ -1,10 +1,6 @@
 package sortvisualization;
 
 public class SelectionSort extends Sort {
-	
-	public SelectionSort() {
-		super();
-	}
 
 	@Override
 	public void run() {

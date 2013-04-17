@@ -2,10 +2,6 @@ package sortvisualization;
 
 public class MergeSort extends Sort {
 
-	public MergeSort() {
-		super();
-	}
-
 	@Override
 	public void run() {
 		if (array.length < 2)

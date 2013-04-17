@@ -1,11 +1,6 @@
 package sortvisualization;
 
 public class RecursiveMergeSort extends Sort {
-	
-
-	public RecursiveMergeSort() {
-		super();
-	}
 
 	@Override
 	public void run() {
