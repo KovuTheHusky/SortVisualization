@@ -230,7 +230,7 @@ public class Window extends JFrame implements ActionListener {
 				}
 				break;
 			case "Version":
-				JOptionPane.showMessageDialog(this, "SortVisualization Version 0.3.0α");
+				JOptionPane.showMessageDialog(this, "SortVisualization Version 0.3.1α");
 				break;
 			case "Increase Speed":
 				ae.setLength(ae.getLength() - 10);
