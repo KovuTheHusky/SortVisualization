@@ -1,7 +1,5 @@
 package sortvisualization;
 
-import java.awt.BorderLayout;
-import java.awt.Container;
 import java.awt.Image;
 import java.util.ArrayList;
 
@@ -11,18 +9,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 public class SortVisualization {
 
-	private static final int ARRAY_LENGTH = 100;
-
-	@SuppressWarnings("unused")
-	private static final int WIDTH = ARRAY_LENGTH > 200 ? ARRAY_LENGTH * 4 + 1 : 801;
-	private static final int HEIGHT = WIDTH * 9 / 16;
-	private static final int MIN = (int)(HEIGHT * 0.1);
-	private static final int MAX = (int)(HEIGHT * 0.9);
-
-	private static Number[] array = new Number[ARRAY_LENGTH];
-
-	private static Window window;
-	private static Canvas canvas;
+	private static int windows = 0;
 
 	public static void main(String args[]) {
 		int[] sizes = {256, 128, 64, 48, 32, 24, 16};
@@ -40,49 +27,19 @@ public class SortVisualization {
 		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
 			ex.printStackTrace();
 		}
-		AudioEngine.nop();
-		new Thread(new Randomize(ARRAY_LENGTH)).start();
-		window = new Window();
-		canvas = new Canvas();
-		Container pane = window.getContentPane();
-		pane.setLayout(new BorderLayout());
-		pane.add(canvas, BorderLayout.CENTER);
-		window.setIconImages(icons);
-		window.pack();
-		window.setLocationRelativeTo(null);
-		window.setVisible(true);
+		new Window().setIconImages(icons);
 	}
 
-	public static Number[] getArray() {
-		return array;
+	public static int getWindowCount() {
+		return windows;
 	}
 
-	public static void setArray(Number[] array) {
-		SortVisualization.array = array;
-	}
-	
-	public static Window getWindow() {
-		return window;
+	public static void addWindow() {
+		++windows;
 	}
 
-	public static Canvas getCanvas() {
-		return canvas;
-	}
-	
-	public static int getWidth() {
-		return WIDTH;
-	}
-	
-	public static int getHeight() {
-		return HEIGHT;
-	}
-	
-	public static int getMinimum() {
-		return MIN;
-	}
-	
-	public static int getMaximum() {
-		return MAX;
+	public static void removeWindow() {
+		--windows;
 	}
 
 }

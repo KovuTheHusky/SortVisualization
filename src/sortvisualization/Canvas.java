@@ -12,121 +12,116 @@ import java.util.ArrayList;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+
 @SuppressWarnings("serial")
 public class Canvas extends JPanel implements ActionListener {
-	
 
-	private static int BAR_WIDTH = SortVisualization.getWidth() / SortVisualization.getArray().length - 1;
-	
+	private Window window;
+
 	private ArrayList<Integer> highlighted = new ArrayList<Integer>();
 	private ArrayList<Integer> toHighlight = new ArrayList<Integer>();
-	private static Color color = Color.BLUE;
-	
+	private Color color = Color.BLUE;
+
 	private int fps;
 	private int lastFps;
 	private long lastFpsOut;
-	
+
 	private Timer timer;
 
 	public Canvas() {
+		throw new NotImplementedException();
+	}
+
+	public Canvas(Window window) {
 		super();
-		Dimension d = new Dimension(SortVisualization.getWidth(), SortVisualization.getHeight());
-		this.setPreferredSize(d);
+		this.window = window;
+		int len = window.getArray().length;
+		int width = len * 8 + len + 2;
+
+		if (width % len == 0)
+			++width;
+		this.setPreferredSize(new Dimension(width, width * 9 / 16));
 		timer = new Timer(16, this);
 		timer.start();
 	}
 
 	public Canvas(LayoutManager layout) {
-		super(layout);
-		Dimension d = new Dimension(SortVisualization.getWidth(), SortVisualization.getHeight());
-		this.setPreferredSize(d);
-		timer = new Timer(16, this);
-		timer.start();
+		throw new NotImplementedException();
 	}
 
 	public Canvas(boolean isDoubleBuffered) {
-		super(isDoubleBuffered);
-		Dimension d = new Dimension(SortVisualization.getWidth(), SortVisualization.getHeight());
-		this.setPreferredSize(d);
-		timer = new Timer(16, this);
-		timer.start();
+		throw new NotImplementedException();
 	}
 
 	public Canvas(LayoutManager layout, boolean isDoubleBuffered) {
-		super(layout, isDoubleBuffered);
-		Dimension d = new Dimension(SortVisualization.getWidth(), SortVisualization.getHeight());
-		this.setPreferredSize(d);
-		timer = new Timer(16, this);
-		timer.start();
+		throw new NotImplementedException();
 	}
-	
+
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		
-		Number[] array = SortVisualization.getArray();
-				
+
+		int width = this.getWidth();
+		int height = this.getHeight();
+		int bar_width = (width - 1) / window.getArray().length - 1;
+		int extra = (width - ((window.getArray().length - 1) * bar_width + (window.getArray().length - 1) + 1 + bar_width)) / 2;
+
+		Number[] array = window.getArray();
+
 		g.setColor(Color.BLACK);
-		
+
 		g.setFont(Font.decode("arial-plain-10"));
-		
+
 		g.drawString(lastFps + "", 5, 12);
-		
-				++fps;
-				long time = System.currentTimeMillis();
-				if (time - 1000 > lastFpsOut) {
-					
-					lastFps = fps;
-					fps = 0;
-					lastFpsOut = time;
-				}
 
-				if (!Window.isBusy() && !highlighted.isEmpty())
-					highlighted.clear();
+		++fps;
+		long time = System.currentTimeMillis();
+		if (time - 1000 > lastFpsOut) {
+			lastFps = fps;
+			fps = 0;
+			lastFpsOut = time;
+		}
 
-				toHighlight.clear();
-				for (int i = 0; i < array.length; ++i)
-					if (array[i].isHighlighted())
-						toHighlight.add(i);
+		if (window.isStopped() && !highlighted.isEmpty())
+			highlighted.clear();
 
-				if (!toHighlight.isEmpty()) {
-					if (!highlighted.isEmpty()) {
-						for (int i = highlighted.size() - 1; i >= 0; --i) {
-							if (!toHighlight.contains(highlighted.get(i))) {
-								highlighted.remove(i);
-							}
-						}
-					}
+		toHighlight.clear();
+		for (int i = 0; i < array.length; ++i)
+			if (array[i].isHighlighted())
+				toHighlight.add(i);
 
-					if (!toHighlight.equals(highlighted)) {
-						for (int i : toHighlight) {
-							
-								highlighted.add(i);
-							
-						}
-					}
-				}
-				
-				for (int i = 0; i < array.length; ++i) {
-					if (!highlighted.contains(i))
-						g.setColor(Color.BLACK);
-					else
-						g.setColor(Canvas.color);
-					g.fillRect(i * BAR_WIDTH + i + 1, SortVisualization.getHeight() - array[i].getValue(), BAR_WIDTH, array[i].getValue());
-				}
-				
+		if (!toHighlight.isEmpty()) {
+			if (!highlighted.isEmpty())
+				for (int i = highlighted.size() - 1; i >= 0; --i)
+					if (!toHighlight.contains(highlighted.get(i)))
+						highlighted.remove(i);
+
+			if (!toHighlight.equals(highlighted))
+				for (int i : toHighlight)
+					highlighted.add(i);
+		}
+
+		for (int i = 0; i < array.length; ++i) {
+			if (!highlighted.contains(i))
+				g.setColor(Color.BLACK);
+			else
+				g.setColor(this.color);
+			g.fillRect(extra + i * bar_width + i + 1, height - array[i].getValue() * height / (window.maximum + 100), bar_width, array[i].getValue() * height / (window.maximum + 100));
+		}
+
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		this.repaint();
 	}
-	
-	public static Color getColor() {
-		return Canvas.color;
+
+	public Color getColor() {
+		return this.color;
 	}
-	
-	public static void setColor(Color color) {
-		Canvas.color = color;
+
+	public void setColor(Color color) {
+		this.color = color;
 	}
-	
+
 }

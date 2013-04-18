@@ -1,11 +1,13 @@
 package sortvisualization;
 
 public abstract class Sort implements Runnable {
-	
+
+	protected Window window;
 	protected Number[] array;
 
-	public Sort() {
-		this.array = SortVisualization.getArray();
+	public Sort(Window window) {
+		this.window = window;
+		this.array = window.getArray();
 	}
 
 	@Override
@@ -19,7 +21,7 @@ public abstract class Sort implements Runnable {
 				return false;
 		return true;
 	}
-	
+
 	protected void swap(int a, int b) {
 		array[a].dirty();
 		array[b].dirty();
@@ -27,11 +29,9 @@ public abstract class Sort implements Runnable {
 		array[a] = array[b];
 		array[b] = temp;
 	}
-	
+
 	protected boolean stop() {
-		if (Window.isStopping())
-			Window.stop();
-		return Window.isStopping();
+		return window.isStopping();
 	}
 
 }

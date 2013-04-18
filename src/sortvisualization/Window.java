@@ -1,7 +1,10 @@
 package sortvisualization;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Container;
 import java.awt.Desktop;
+import java.awt.Dimension;
 import java.awt.Event;
 import java.awt.GraphicsConfiguration;
 import java.awt.HeadlessException;
@@ -15,136 +18,190 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.Scanner;
 
+import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JColorChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
-import javax.swing.KeyStroke;
-import javax.swing.Timer;
+
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 @SuppressWarnings("serial")
 public class Window extends JFrame implements ActionListener {
-	
-	private final static int MODIFIER = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
-	private static Thread thread = null;
-	private static boolean isStopping = false;
-	
-	private Timer timer;
 
-	private static HashMap<String, JMenuItem> items = new HashMap<String, JMenuItem>();
-	
+	public static final int MODIFIER = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
+
+	private Number[] array = new Number[100];
+
+	public int maximum = 1000;
+
+	private boolean isStopping = false;
+	private boolean isStopped = true;
+
+	private Canvas canvas;
+	private AudioEngine ae = new AudioEngine();
+
+	ArrayList<JMenuItem> items = new ArrayList<JMenuItem>();
+	JMenuItem inc, dec;
+
 	public Window() throws HeadlessException {
 		super();
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+		// Get new numbers
+		new Randomize(this).run();
+
+		int max = 0;
+		for (int i = 0; i < array.length; ++i) {
+			if (array[i].getValue() > max)
+				max = array[i].getValue();
+		}
+		maximum = max;
+
+		// Set up the window
+		SortVisualization.addWindow();
 		this.setTitle("SortVisualization");
-		this.setResizable(false);
-		this.setupMenuBar();
-		timer = new Timer(16, this);
-		timer.start();
+		int minimumWidth = 2 * array.length + 1;
+		this.setMinimumSize(new Dimension(minimumWidth, minimumWidth * 9 / 16));
+		this.setResizable(true);
+
+		// Set up the menu
+		JMenuItem jmi;
+		JMenuBar menu = new JMenuBar();
+		JMenu file = new JMenu("File");
+		file.add(jmi = new ModifierMenuItem("New", this, KeyEvent.VK_N));
+		items.add(jmi);
+		file.add(new ModifierMenuItem("New Window", this, KeyEvent.VK_N, Event.SHIFT_MASK));
+		file.add(new ModifierMenuItem("Close", this, KeyEvent.VK_W));
+		if (!System.getProperty("os.name").equals("Mac OS X")) {
+			file.add(new ModifierMenuItem("Exit", this, KeyEvent.VK_Q));
+		}
+		menu.add(file);
+		JMenu edit = new JMenu("Edit");
+		edit.add(jmi = new ModifierMenuItem("Increase Speed", this, KeyEvent.VK_EQUALS)).setEnabled(false);
+		inc = jmi;
+		edit.add(jmi = new ModifierMenuItem("Decrease Speed", this, KeyEvent.VK_MINUS));
+		dec = jmi;
+		edit.add(new ModifierMenuItem("Reset Speed", this, KeyEvent.VK_0));
+		edit.addSeparator();
+		edit.add(new ModifierMenuItem("Highlight Color...", this));
+		edit.addSeparator();
+		JCheckBoxMenuItem jcbmi = new JCheckBoxMenuItem("Play Sounds");
+		jcbmi.addActionListener(this);
+		jcbmi.setSelected(true);
+		edit.add(jcbmi);
+		menu.add(edit);
+		JMenu sort = new JMenu("Sort");
+		sort.add(jmi = new ModifierMenuItem("Selection Sort", this, KeyEvent.VK_S));
+		items.add(jmi);
+		sort.add(jmi = new ModifierMenuItem("Insertion Sort", this, KeyEvent.VK_I));
+		items.add(jmi);
+		sort.add(jmi = new ModifierMenuItem("Iterative Merge Sort", this, KeyEvent.VK_M));
+		items.add(jmi);
+		sort.add(jmi = new ModifierMenuItem("Recursive Merge Sort", this, KeyEvent.VK_M, Event.SHIFT_MASK));
+		items.add(jmi);
+		sort.add(jmi = new ModifierMenuItem("Bogosort", this, KeyEvent.VK_B));
+		items.add(jmi);
+		sort.addSeparator();
+		sort.add(jmi = new ModifierMenuItem("Is Sorted?", this));
+		items.add(jmi);
+		sort.add(jmi = new ModifierMenuItem("Stop Sorting", this)).setEnabled(false);
+		items.add(jmi);
+		menu.add(sort);
+		JMenu help = new JMenu("Help");
+		help.add(new ModifierMenuItem("About...", this));
+		help.add(new ModifierMenuItem("License...", this));
+		help.add(new ModifierMenuItem("Version", this));
+		menu.add(help);
+		this.setJMenuBar(menu);
+
+		// Add the canvas
+		this.canvas = new Canvas(this);
+		Container pane = this.getContentPane();
+		pane.setLayout(new BorderLayout());
+		pane.add(canvas, BorderLayout.CENTER);
+
+		// Pack the window and show it
+		this.pack();
+		this.setLocationRelativeTo(null);
+		this.setVisible(true);
+
 	}
 
 	public Window(GraphicsConfiguration gc) {
-		super(gc);
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setTitle("SortVisualization");
-		this.setResizable(false);
-		this.setupMenuBar();
+		throw new NotImplementedException();
 	}
 
 	public Window(String title) throws HeadlessException {
-		super(title);
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setTitle("SortVisualization");
-		this.setResizable(false);
-		this.setupMenuBar();
+		throw new NotImplementedException();
 	}
 
 	public Window(String title, GraphicsConfiguration gc) {
-		super(title, gc);
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setTitle("SortVisualization");
-		this.setSize(SortVisualization.getWidth(), SortVisualization.getHeight());
-		this.setResizable(false);
-		this.setupMenuBar();
+		throw new NotImplementedException();
 	}
-	
-	private void setupMenuBar() {
-		JMenuBar bar = new JMenuBar();
-		JMenu file = new JMenu("File");
-		this.addMenuItem(file, "New", KeyEvent.VK_N);
-		this.addMenuItem(file, "Close", KeyEvent.VK_W);
-		bar.add(file);
-		JMenu edit = new JMenu("Edit");
-		this.addMenuItem(edit, "Increase Speed", KeyEvent.VK_EQUALS).setEnabled(false);
-		this.addMenuItem(edit, "Decrease Speed", KeyEvent.VK_MINUS);
-		this.addMenuItem(edit, "Reset Speed", KeyEvent.VK_0);
-		edit.addSeparator();
-		this.addMenuItem(edit, "Highlight Color...");
-		bar.add(edit);
-		JMenu sort = new JMenu("Sort");
-		this.addMenuItem(sort, "Selection Sort", KeyEvent.VK_S);
-		this.addMenuItem(sort, "Insertion Sort", KeyEvent.VK_I);
-		this.addMenuItem(sort, "Iterative Merge Sort", KeyEvent.VK_M);
-		this.addMenuItem(sort, "Recursive Merge Sort", KeyEvent.VK_M, Event.SHIFT_MASK);
-		this.addMenuItem(sort, "Bogosort", KeyEvent.VK_B);
-		sort.addSeparator();
-		this.addMenuItem(sort, "Is Sorted?");
-		this.addMenuItem(sort, "Stop Sorting").setEnabled(false);
-		bar.add(sort);
-		JMenu help = new JMenu("Help");
-		this.addMenuItem(help, "About...");
-		this.addMenuItem(help, "License...");
-		this.addMenuItem(help, "Version");
-		bar.add(help);
-		this.setJMenuBar(bar);
+
+	public boolean isStopping() {
+		return this.isStopping;
 	}
-	
-	private JMenuItem addMenuItem(JMenu parent, String name) {
-		JMenuItem jmi = new JMenuItem(name);
-		jmi.addActionListener(this);
-		parent.add(jmi);
-		items.put(name, jmi);
-		return jmi;
+
+	public boolean isStopped() {
+		return this.isStopped;
 	}
-	
-	private JMenuItem addMenuItem(JMenu parent, String name, int key) {
-		JMenuItem jmi = new JMenuItem(name);
-		jmi.addActionListener(this);
-		jmi.setAccelerator(KeyStroke.getKeyStroke(key, MODIFIER));
-		parent.add(jmi);
-		items.put(name, jmi);
-		return jmi;
+
+	public void start(final Runnable runnable) {
+		new Thread(new Runnable() {
+			public void run() {
+				isStopped = false;
+				for (JMenuItem jmi : items)
+					jmi.setEnabled(!jmi.isEnabled());
+				Thread thread;
+				(thread = new Thread(runnable)).start();
+				try {
+					thread.join();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				for (JMenuItem jmi : items)
+					jmi.setEnabled(!jmi.isEnabled());
+				isStopped = true;
+				isStopping = false;
+			}
+		}).start();
 	}
-	
-	private JMenuItem addMenuItem(JMenu parent, String name, int key, int mod) {
-		JMenuItem jmi = new JMenuItem(name);
-		jmi.addActionListener(this);
-		jmi.setAccelerator(KeyStroke.getKeyStroke(key, MODIFIER + mod));
-		parent.add(jmi);
-		items.put(name, jmi);
-		return jmi;
+
+	public Number[] getArray() {
+		return this.array;
+	}
+
+	public void setArray(Number[] array) {
+		this.array = array;
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		
-		if (e.getID() == 0) {
-			if (thread == null || !thread.isAlive()) {
-				thread = null;
-				setBusy(false);
-				isStopping = false;
-			}
-			return;
-		}
-				
-		switch(e.getActionCommand()) {
+
+		switch (e.getActionCommand()) {
+			case "New Window":
+				new Window();
+				break;
 			case "Close":
+				if (SortVisualization.getWindowCount() > 1) {
+
+					isStopping = true;
+
+					SortVisualization.removeWindow();
+					this.dispose();
+				} else {
+					System.exit(0);
+				}
+				break;
+			case "Exit":
 				System.exit(0);
+				break;
 			case "About...":
 				try {
 					Desktop.getDesktop().browse(new URI("http://codeski.com/sortvisualization"));
@@ -159,7 +216,7 @@ public class Window extends JFrame implements ActionListener {
 					FileWriter fw = new FileWriter(temp);
 					InputStream in = getClass().getClassLoader().getResourceAsStream("license.html");
 					Scanner scanner = new Scanner(in);
-					while(scanner.hasNextLine())
+					while (scanner.hasNextLine())
 						fw.write(scanner.nextLine());
 					scanner.close();
 					fw.close();
@@ -169,103 +226,79 @@ public class Window extends JFrame implements ActionListener {
 				}
 				break;
 			case "Version":
-				JOptionPane.showMessageDialog(this, "SortVisualization Version 0.2.1α");
+				JOptionPane.showMessageDialog(this, "SortVisualization Version 0.3.0α");
 				break;
 			case "Increase Speed":
-				AudioEngine.setLength(AudioEngine.getLength() - 10);
-				if (AudioEngine.getLength() <= 10)
+				ae.setLength(ae.getLength() - 10);
+				if (ae.getLength() <= 10)
 					((JMenuItem)e.getSource()).setEnabled(false);
-				items.get("Decrease Speed").setEnabled(true);
+				dec.setEnabled(true);
 				break;
 			case "Decrease Speed":
-				AudioEngine.setLength(AudioEngine.getLength() + 10);
-				if (AudioEngine.getLength() >= 1000)
+				ae.setLength(ae.getLength() + 10);
+				if (ae.getLength() >= 1000)
 					((JMenuItem)e.getSource()).setEnabled(false);
-				items.get("Increase Speed").setEnabled(true);
+				inc.setEnabled(true);
 				break;
 			case "Reset Speed":
-				AudioEngine.setLength(10);
-				items.get("Increase Speed").setEnabled(true);
-				items.get("Decrease Speed").setEnabled(true);
-				if (AudioEngine.getLength() <= 10)
-					items.get("Increase Speed").setEnabled(false);
-				else if (AudioEngine.getLength() >= 1000)
-					items.get("Decrease Speed").setEnabled(false);
+				int len = 10;
+				ae.setLength(len);
+				inc.setEnabled(false);
+				dec.setEnabled(true);
 				break;
 			case "Highlight Color...":
-				Color c = JColorChooser.showDialog(this, "Highlight Color", Canvas.getColor());
+				Color c = JColorChooser.showDialog(this, "Highlight Color", canvas.getColor());
 				if (c != null)
-					Canvas.setColor(c);
+					canvas.setColor(c);
+				break;
+			case "Play Sounds":
+				ae.toggleMute();
 				break;
 			case "Stop Sorting":
 				isStopping = true;
 				break;
 		}
-		
-		if (isBusy())
+
+		if (!isStopped)
 			return;
-		
-		switch(e.getActionCommand()) {
+
+		switch (e.getActionCommand()) {
 			case "New":
-				setBusy(true);
-				(thread = new Thread(new Randomize(SortVisualization.getArray().length))).start();
+				start(new Randomize(this));
 				break;
 			case "Selection Sort":
-				setBusy(true);
-				(thread = new Thread(new SelectionSort())).start();
+				start(new SelectionSort(this));
 				break;
 			case "Insertion Sort":
-				setBusy(true);
-				(thread = new Thread(new InsertionSort())).start();
+				start(new InsertionSort(this));
 				break;
 			case "Iterative Merge Sort":
-				setBusy(true);
-				(thread = new Thread(new MergeSort())).start();
+				start(new MergeSort(this));
 				break;
 			case "Recursive Merge Sort":
-				setBusy(true);
-				(thread = new Thread(new RecursiveMergeSort())).start();
+				start(new RecursiveMergeSort(this));
 				break;
 			case "Bogosort":
-				setBusy(true);
-				(thread = new Thread(new BogoSort())).start();
+				start(new BogoSort(this));
 				break;
 			case "Is Sorted?":
-				setBusy(true);
-				(thread = new Thread(new Runnable() { public void run() {
-					Number[] arr = SortVisualization.getArray();
-					for (int i = 1; i < arr.length; ++i)
-						if (arr[i - 1].gt(arr[i])) {
-							JOptionPane.showMessageDialog(null, "The array is not sorted.");
-							return;
-						}
-					JOptionPane.showMessageDialog(null, "The array is sorted!");
-				} })).start();
+				start(new Runnable() {
+					public void run() {
+						Number[] arr = array;
+						for (int i = 1; i < arr.length; ++i)
+							if (arr[i - 1].gt(arr[i])) {
+								JOptionPane.showMessageDialog(null, "The array is not sorted.");
+								return;
+							}
+						JOptionPane.showMessageDialog(null, "The array is sorted!");
+					}
+				});
 		}
-			
+
 	}
-	
-	public static boolean isBusy() {
-		return thread != null && thread.isAlive();
-	}
-	
-	public static void setBusy(boolean busy) {
-		items.get("New").setEnabled(!busy);
-		items.get("Selection Sort").setEnabled(!busy);
-		items.get("Insertion Sort").setEnabled(!busy);
-		items.get("Iterative Merge Sort").setEnabled(!busy);
-		items.get("Recursive Merge Sort").setEnabled(!busy);
-		items.get("Bogosort").setEnabled(!busy);
-		items.get("Is Sorted?").setEnabled(!busy);
-		items.get("Stop Sorting").setEnabled(busy);
-	}
-	
-	public static boolean isStopping() {
-		return Window.isStopping;
-	}
-	
-	public static void stop() {
-		Window.thread = null;
+
+	public AudioEngine getAudioEngine() {
+		return ae;
 	}
 
 }

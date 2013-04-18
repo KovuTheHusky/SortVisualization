@@ -2,6 +2,10 @@ package sortvisualization;
 
 public class SelectionSort extends Sort {
 
+	public SelectionSort(Window window) {
+		super(window);
+	}
+
 	@Override
 	public void run() {
 		if (array.length <= 1)
@@ -9,7 +13,8 @@ public class SelectionSort extends Sort {
 		for (int i = 0; i < array.length; ++i) {
 			int min = i;
 			for (int j = i + 1; j < array.length; ++j) {
-				if (this.stop()) return;
+				if (this.stop())
+					return;
 				if (array[j].lt(array[min]))
 					min = j;
 			}

@@ -2,6 +2,10 @@ package sortvisualization;
 
 public class InsertionSort extends Sort {
 
+	public InsertionSort(Window window) {
+		super(window);
+	}
+
 	@Override
 	public void run() {
 		if (array.length <= 1)
@@ -10,7 +14,8 @@ public class InsertionSort extends Sort {
 			Number valueToInsert = array[i];
 			int holePos = i;
 			while (holePos > 0 && array[holePos].lt(array[holePos - 1])) {
-				if (this.stop()) return;
+				if (this.stop())
+					return;
 				swap(holePos, holePos - 1);
 				--holePos;
 			}
@@ -18,5 +23,5 @@ public class InsertionSort extends Sort {
 			array[holePos].dirty();
 		}
 	}
-	
+
 }
