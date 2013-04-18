@@ -16,7 +16,7 @@ public class Randomize implements Runnable {
 	public void run() {
 		Random random = new Random();
 		for (int i = 0; i < array.length; ++i)
-			array[i] = new Number(random.nextInt(window.maximum - 1) + 1, window.getAudioEngine());
+			array[i] = new Number(random.nextInt(window.getMaximum() - 1) + 1, window.getAudioEngine());
 	}
 
 }

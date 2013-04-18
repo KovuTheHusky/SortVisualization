@@ -38,7 +38,7 @@ public class Window extends JFrame implements ActionListener {
 
 	private Number[] array = new Number[100];
 
-	public int maximum = 1000;
+	private int maximum = 1000;
 
 	private boolean isStopping = false;
 	private boolean isStopped = true;
@@ -150,6 +150,10 @@ public class Window extends JFrame implements ActionListener {
 
 	public boolean isStopped() {
 		return this.isStopped;
+	}
+	
+	public int getMaximum() {
+		return this.maximum;
 	}
 
 	public void start(final Runnable runnable) {

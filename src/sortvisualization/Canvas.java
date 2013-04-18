@@ -106,7 +106,7 @@ public class Canvas extends JPanel implements ActionListener {
 				g.setColor(Color.BLACK);
 			else
 				g.setColor(this.color);
-			g.fillRect(extra + i * bar_width + i + 1, height - array[i].getValue() * height / (window.maximum + 100), bar_width, array[i].getValue() * height / (window.maximum + 100));
+			g.fillRect(extra + i * bar_width + i + 1, height - array[i].getValue() * height / (window.getMaximum() + 100), bar_width, array[i].getValue() * height / (window.getMaximum() + 100));
 		}
 
 	}
