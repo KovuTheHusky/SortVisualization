@@ -12,7 +12,7 @@ public class SortVisualization {
 	private static int windows = 0;
 
 	public static void main(String args[]) {
-		int[] sizes = {256, 128, 64, 48, 32, 24, 16};
+		int[] sizes = { 256, 128, 64, 48, 32, 24, 16 };
 		ArrayList<Image> icons = new ArrayList<Image>();
 		for (int i : sizes)
 			icons.add(new ImageIcon(SortVisualization.class.getClassLoader().getResource("icon" + i + ".png")).getImage());
