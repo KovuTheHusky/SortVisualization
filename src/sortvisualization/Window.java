@@ -64,6 +64,7 @@ public class Window extends JFrame implements ActionListener {
 
 		// Set up the window
 		SortVisualization.addWindow(this);
+		this.setIconImages(SortVisualization.getIconImages());
 		this.setTitle("SortVisualization");
 		int minimumWidth = 2 * array.length + 1;
 		this.setMinimumSize(new Dimension(minimumWidth, minimumWidth * 9 / 16));
@@ -114,7 +115,7 @@ public class Window extends JFrame implements ActionListener {
 		JMenu help = new JMenu("Help");
 		help.add(new ModifierMenuItem("About...", this));
 		help.add(new ModifierMenuItem("License...", this));
-		help.add(new ModifierMenuItem("Version", this));
+		help.add(new ModifierMenuItem("Version...", this));
 		menu.add(help);
 		this.setJMenuBar(menu);
 
@@ -226,19 +227,19 @@ public class Window extends JFrame implements ActionListener {
 					ex.printStackTrace();
 				}
 				break;
-			case "Version":
-				JOptionPane.showMessageDialog(this, "SortVisualization Version 0.3.1α");
+			case "Version...":
+				JOptionPane.showMessageDialog(this, "SortVisualization Version 0.3.2α");
 				break;
 			case "Increase Speed":
 				ae.setLength(ae.getLength() - 10);
 				if (ae.getLength() <= 10)
-					((JMenuItem)e.getSource()).setEnabled(false);
+					inc.setEnabled(false);
 				dec.setEnabled(true);
 				break;
 			case "Decrease Speed":
 				ae.setLength(ae.getLength() + 10);
 				if (ae.getLength() >= 1000)
-					((JMenuItem)e.getSource()).setEnabled(false);
+					dec.setEnabled(false);
 				inc.setEnabled(true);
 				break;
 			case "Reset Speed":

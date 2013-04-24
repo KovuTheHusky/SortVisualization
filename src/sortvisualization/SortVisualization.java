@@ -10,10 +10,11 @@ import javax.swing.UnsupportedLookAndFeelException;
 public class SortVisualization {
 
 	private static ArrayList<Window> windows = new ArrayList<Window>();
+	private static ArrayList<Image> icons;
 
 	public static void main(String args[]) {
 		int[] sizes = { 256, 128, 64, 48, 32, 24, 16 };
-		ArrayList<Image> icons = new ArrayList<Image>();
+		icons = new ArrayList<Image>();
 		for (int i : sizes)
 			icons.add(new ImageIcon(SortVisualization.class.getClassLoader().getResource("icon" + i + ".png")).getImage());
 		if (System.getProperty("os.name").equals("Mac OS X")) {
@@ -27,7 +28,7 @@ public class SortVisualization {
 		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
 			ex.printStackTrace();
 		}
-		new Window().setIconImages(icons);
+		new Window();
 	}
 
 	public static int getWindowCount() {
@@ -40,6 +41,10 @@ public class SortVisualization {
 
 	public static void removeWindow(Window w) {
 		windows.remove(w);
+	}
+	
+	public static ArrayList<Image> getIconImages() {
+		return icons;
 	}
 
 }
