@@ -63,7 +63,7 @@ public class Window extends JFrame implements ActionListener {
 		maximum = max;
 
 		// Set up the window
-		SortVisualization.addWindow();
+		SortVisualization.addWindow(this);
 		this.setTitle("SortVisualization");
 		int minimumWidth = 2 * array.length + 1;
 		this.setMinimumSize(new Dimension(minimumWidth, minimumWidth * 9 / 16));
@@ -194,7 +194,7 @@ public class Window extends JFrame implements ActionListener {
 			case "Close":
 				if (SortVisualization.getWindowCount() > 1) {
 					isStopping = true;
-					SortVisualization.removeWindow();
+					SortVisualization.removeWindow(this);
 					this.dispose();
 				} else {
 					System.exit(0);

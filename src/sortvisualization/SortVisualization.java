@@ -9,7 +9,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 public class SortVisualization {
 
-	private static int windows = 0;
+	private static ArrayList<Window> windows = new ArrayList<Window>();
 
 	public static void main(String args[]) {
 		int[] sizes = { 256, 128, 64, 48, 32, 24, 16 };
@@ -31,15 +31,15 @@ public class SortVisualization {
 	}
 
 	public static int getWindowCount() {
-		return windows;
+		return windows.size();
 	}
 
-	public static void addWindow() {
-		++windows;
+	public static void addWindow(Window w) {
+		windows.add(w);
 	}
 
-	public static void removeWindow() {
-		--windows;
+	public static void removeWindow(Window w) {
+		windows.remove(w);
 	}
 
 }
