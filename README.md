@@ -3,6 +3,13 @@ SortVisualization
 
 Lets you watch and listen to sorting algorithms.
 
+About
+--------------------
+
+To write your own sorting algorithm download the source, create a class that extends Sort and override the run method. Then add it to the sort JMenu and actionPerformed method in the Window class.
+
+In future versions it will be even easier to write and test your own sorting algorithms.
+
 License
 --------------------
 
