@@ -76,7 +76,9 @@ public class Window extends JFrame implements ActionListener {
 		JMenu file = new JMenu("File");
 		file.add(jmi = new ModifierMenuItem("New", this, KeyEvent.VK_N));
 		items.add(jmi);
-		file.add(new ModifierMenuItem("New Window", this, KeyEvent.VK_N, Event.SHIFT_MASK));
+		file.add(jmi = new ModifierMenuItem("New...", this, KeyEvent.VK_N, Event.SHIFT_MASK));
+		items.add(jmi);
+		file.add(new ModifierMenuItem("New Window", this));
 		file.add(new ModifierMenuItem("Close", this, KeyEvent.VK_W));
 		if (!System.getProperty("os.name").equals("Mac OS X"))
 			file.add(new ModifierMenuItem("Exit", this, KeyEvent.VK_Q));
@@ -266,6 +268,18 @@ public class Window extends JFrame implements ActionListener {
 
 		switch (e.getActionCommand()) {
 			case "New":
+				start(new Randomize(this));
+				break;
+			case "New...":
+				int len = 0;
+				while (len < 1) {
+					String s = JOptionPane.showInputDialog(this, "How many elements would you like?");
+					if (s == null)
+						return;
+					else
+						len = Integer.parseInt(s);
+				}
+				this.setArray(new Number[len]);
 				start(new Randomize(this));
 				break;
 			case "Selection Sort":
