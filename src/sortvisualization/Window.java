@@ -80,7 +80,7 @@ public class Window extends JFrame implements ActionListener {
 		items.add(jmi);
 		file.add(new ModifierMenuItem("Close", this, KeyEvent.VK_W));
 		if (!System.getProperty("os.name").equals("Mac OS X"))
-			file.add(new ModifierMenuItem("Exit", this, KeyEvent.VK_Q));
+			file.add(new ModifierMenuItem("Exit", this, KeyEvent.VK_F4, Event.ALT_MASK - MODIFIER));
 		menu.add(file);
 		JMenu edit = new JMenu("Edit");
 		edit.add(jmi = new ModifierMenuItem("Increase Speed", this, KeyEvent.VK_EQUALS)).setEnabled(false);
