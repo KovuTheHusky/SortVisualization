@@ -13,6 +13,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -23,6 +24,7 @@ import java.util.Scanner;
 
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JColorChooser;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -77,6 +79,10 @@ public class Window extends JFrame implements ActionListener {
 		file.add(jmi = new ModifierMenuItem("New", this, KeyEvent.VK_N));
 		items.add(jmi);
 		file.add(jmi = new ModifierMenuItem("New...", this, KeyEvent.VK_N, Event.SHIFT_MASK));
+		items.add(jmi);
+		file.add(jmi = new ModifierMenuItem("Open...", this, KeyEvent.VK_O));
+		items.add(jmi);
+		file.add(jmi = new ModifierMenuItem("Save...", this, KeyEvent.VK_S));
 		items.add(jmi);
 		file.add(new ModifierMenuItem("Close", this, KeyEvent.VK_W));
 		if (!System.getProperty("os.name").equals("Mac OS X"))
@@ -302,6 +308,36 @@ public class Window extends JFrame implements ActionListener {
 				}
 				this.setArray(new Number[len]);
 				start(new Randomize(this));
+				break;
+			case "Open...":
+				JFileChooser jfc = new JFileChooser();
+				Scanner scanner = null;
+				if (jfc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+					try {
+						scanner = new Scanner(jfc.getSelectedFile());
+					} catch (FileNotFoundException e1) {
+						e1.printStackTrace();
+					}
+					ArrayList<Number> nums = new ArrayList<Number>();
+					while (scanner.hasNextInt())
+						nums.add(new Number(scanner.nextInt(), this.ae));
+					this.setArray(nums.toArray(new Number[nums.size()]));
+				}
+				break;
+			case "Save...":
+				JFileChooser jfc2 = new JFileChooser();
+				FileWriter fw = null;
+				if (jfc2.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
+					try {
+						fw = new FileWriter(jfc2.getSelectedFile());
+						for (Number num : this.getArray()) {
+							fw.write(num.getValue() + " ");
+						}
+						fw.close();
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					}
+				}
 				break;
 			case "Selection Sort":
 				start(new SelectionSort(this));
