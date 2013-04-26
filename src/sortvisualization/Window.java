@@ -78,7 +78,6 @@ public class Window extends JFrame implements ActionListener {
 		items.add(jmi);
 		file.add(jmi = new ModifierMenuItem("New...", this, KeyEvent.VK_N, Event.SHIFT_MASK));
 		items.add(jmi);
-		file.add(new ModifierMenuItem("New Window", this));
 		file.add(new ModifierMenuItem("Close", this, KeyEvent.VK_W));
 		if (!System.getProperty("os.name").equals("Mac OS X"))
 			file.add(new ModifierMenuItem("Exit", this, KeyEvent.VK_Q));
@@ -117,6 +116,9 @@ public class Window extends JFrame implements ActionListener {
 		sort.add(jmi = new ModifierMenuItem("Stop Sorting", this, KeyEvent.VK_ESCAPE, -MODIFIER)).setEnabled(false);
 		items.add(jmi);
 		menu.add(sort);
+		JMenu window = new JMenu("Window");
+		window.add(new ModifierMenuItem("New Window", this));
+		menu.add(window);
 		JMenu help = new JMenu("Help");
 		help.add(new ModifierMenuItem("About...", this));
 		help.add(new ModifierMenuItem("License...", this));
