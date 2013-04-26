@@ -89,12 +89,15 @@ public class Window extends JFrame implements ActionListener {
 		edit.add(jmi = new ModifierMenuItem("Decrease Speed", this, KeyEvent.VK_MINUS));
 		dec = jmi;
 		edit.add(new ModifierMenuItem("Reset Speed", this, KeyEvent.VK_0));
+		edit.add(new ModifierMenuItem("Custom Speed...", this));
 		edit.addSeparator();
 		edit.add(new ModifierMenuItem("Highlight Color...", this));
 		edit.addSeparator();
-		JCheckBoxMenuItem jcbmi = new JCheckBoxMenuItem("Play Sounds");
+		JCheckBoxMenuItem jcbmi = new JCheckBoxMenuItem("Mute Sounds");
 		jcbmi.addActionListener(this);
-		jcbmi.setSelected(true);
+		edit.add(jcbmi);
+		jcbmi = new JCheckBoxMenuItem("Mute All Sounds");
+		jcbmi.addActionListener(this);
 		edit.add(jcbmi);
 		menu.add(edit);
 		JMenu sort = new JMenu("Sort");
@@ -111,7 +114,7 @@ public class Window extends JFrame implements ActionListener {
 		sort.addSeparator();
 		sort.add(jmi = new ModifierMenuItem("Is Sorted?", this));
 		items.add(jmi);
-		sort.add(jmi = new ModifierMenuItem("Stop Sorting", this)).setEnabled(false);
+		sort.add(jmi = new ModifierMenuItem("Stop Sorting", this, KeyEvent.VK_ESCAPE, -MODIFIER)).setEnabled(false);
 		items.add(jmi);
 		menu.add(sort);
 		JMenu help = new JMenu("Help");
@@ -250,13 +253,29 @@ public class Window extends JFrame implements ActionListener {
 				inc.setEnabled(false);
 				dec.setEnabled(true);
 				break;
+			case "Custom Speed...":
+				int len2 = 0;
+				while (len2 < 10 || len2 > 1000) {
+					String s = JOptionPane.showInputDialog(this, "How long should we pause for in milliseconds? (10-1000)");
+					if (s == null)
+						return;
+					else
+						len2 = Integer.parseInt(s);
+				}
+				ae.setLength(len2);
+				inc.setEnabled(true);
+				dec.setEnabled(true);
+				break;
 			case "Highlight Color...":
 				Color c = JColorChooser.showDialog(this, "Highlight Color", canvas.getColor());
 				if (c != null)
 					canvas.setColor(c);
 				break;
-			case "Play Sounds":
-				ae.toggleMute();
+			case "Mute Sounds":
+				ae.setMuted(!ae.isMuted());
+				break;
+			case "Mute All Sounds":
+				SortVisualization.setMuted(!SortVisualization.isMuted());
 				break;
 			case "Stop Sorting":
 				isStopping = true;

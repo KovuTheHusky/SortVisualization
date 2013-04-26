@@ -36,11 +36,10 @@ public final class AudioEngine {
 	}
 
 	public void play(Number num, Number num2) {
-		if (this.muted) {
+		if (this.muted || SortVisualization.isMuted()) {
 			try {
 				Thread.sleep(length);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			return;
@@ -73,9 +72,13 @@ public final class AudioEngine {
 			length = 1000;
 		this.length = length;
 	}
+	
+	public boolean isMuted() {
+		return this.muted;
+	}
 
-	public void toggleMute() {
-		this.muted = !this.muted;
+	public void setMuted(boolean muted) {
+		this.muted = muted;
 	}
 
 }

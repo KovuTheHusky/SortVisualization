@@ -11,6 +11,8 @@ public class SortVisualization {
 
 	private static ArrayList<Window> windows = new ArrayList<Window>();
 	private static ArrayList<Image> icons;
+	
+	private static boolean muted = false;
 
 	public static void main(String args[]) {
 		int[] sizes = { 256, 128, 64, 48, 32, 24, 16 };
@@ -45,6 +47,14 @@ public class SortVisualization {
 	
 	public static ArrayList<Image> getIconImages() {
 		return icons;
+	}
+
+	public static boolean isMuted() {
+		return muted;
+	}
+	
+	public static void setMuted(boolean muted) {
+		SortVisualization.muted = muted;
 	}
 
 }
