@@ -241,7 +241,7 @@ public class Window extends JFrame implements ActionListener {
 				}
 				break;
 			case "Version...":
-				JOptionPane.showMessageDialog(this, "SortVisualization Version 0.4.0α");
+				JOptionPane.showMessageDialog(this, "SortVisualization Version 0.4.1α");
 				break;
 			case "Increase Speed":
 				ae.setLength(ae.getLength() - 10);
@@ -271,8 +271,16 @@ public class Window extends JFrame implements ActionListener {
 						len2 = Integer.parseInt(s);
 				}
 				ae.setLength(len2);
-				inc.setEnabled(true);
-				dec.setEnabled(true);
+				if (ae.getLength() == 10) {
+					inc.setEnabled(false);
+					dec.setEnabled(true);
+				} else if (ae.getLength() == 1000) {
+					inc.setEnabled(true);
+					dec.setEnabled(false);
+				} else {
+					inc.setEnabled(true);
+					dec.setEnabled(true);
+				}
 				break;
 			case "Highlight Color...":
 				Color c = JColorChooser.showDialog(this, "Highlight Color", canvas.getColor());
