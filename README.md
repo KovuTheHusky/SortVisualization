@@ -10,6 +10,11 @@ To write your own sorting algorithm download the source, create a class that ext
 
 In future versions it will be even easier to write and test your own sorting algorithms.
 
+Requirements
+--------------------
+
+Any operating system (tested on Windows and OS X) that has Java 7+ installed.
+
 License
 --------------------
 
