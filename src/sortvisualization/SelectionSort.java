@@ -1,7 +1,6 @@
 package sortvisualization;
 
 public class SelectionSort extends Sort {
-
 	public SelectionSort(Window window) {
 		super(window);
 	}
@@ -22,5 +21,4 @@ public class SelectionSort extends Sort {
 				swap(i, min);
 		}
 	}
-
 }

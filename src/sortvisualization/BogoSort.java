@@ -3,7 +3,6 @@ package sortvisualization;
 import java.util.Random;
 
 public class BogoSort extends Sort {
-
 	public BogoSort(Window window) {
 		super(window);
 	}
@@ -15,9 +14,8 @@ public class BogoSort extends Sort {
 			for (int i = 0; i < array.length; ++i) {
 				if (this.stop())
 					return;
-				swap(i, (int)r.nextInt(array.length));
+				swap(i, r.nextInt(array.length));
 			}
 		}
 	}
-
 }

@@ -8,10 +8,8 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 public class SortVisualization {
-
 	private static ArrayList<Window> windows = new ArrayList<Window>();
 	private static ArrayList<Image> icons;
-	
 	private static boolean muted = false;
 
 	public static void main(String args[]) {
@@ -44,7 +42,7 @@ public class SortVisualization {
 	public static void removeWindow(Window w) {
 		windows.remove(w);
 	}
-	
+
 	public static ArrayList<Image> getIconImages() {
 		return icons;
 	}
@@ -52,9 +50,8 @@ public class SortVisualization {
 	public static boolean isMuted() {
 		return muted;
 	}
-	
+
 	public static void setMuted(boolean muted) {
 		SortVisualization.muted = muted;
 	}
-
 }

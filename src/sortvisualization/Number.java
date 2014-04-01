@@ -1,7 +1,6 @@
 package sortvisualization;
 
 public class Number implements Comparable<Number> {
-
 	private int value;
 	private boolean highlighted;
 	private boolean dirty;
@@ -14,10 +13,12 @@ public class Number implements Comparable<Number> {
 		this.ae = ae;
 	}
 
+	@Override
 	public String toString() {
 		return this.value + "";
 	}
 
+	@Override
 	public int compareTo(Number that) {
 		this.highlighted();
 		that.highlighted();
@@ -93,5 +94,4 @@ public class Number implements Comparable<Number> {
 		this.dirty = false;
 		return ret;
 	}
-
 }

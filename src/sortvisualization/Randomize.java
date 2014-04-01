@@ -3,7 +3,6 @@ package sortvisualization;
 import java.util.Random;
 
 public class Randomize implements Runnable {
-
 	private Window window;
 	private Number[] array;
 
@@ -18,5 +17,4 @@ public class Randomize implements Runnable {
 		for (int i = 0; i < array.length; ++i)
 			array[i] = new Number(random.nextInt(window.getMaximum() - 1) + 1, window.getAudioEngine());
 	}
-
 }

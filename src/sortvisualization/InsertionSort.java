@@ -1,7 +1,6 @@
 package sortvisualization;
 
 public class InsertionSort extends Sort {
-
 	public InsertionSort(Window window) {
 		super(window);
 	}
@@ -23,5 +22,4 @@ public class InsertionSort extends Sort {
 			array[holePos].dirty();
 		}
 	}
-
 }

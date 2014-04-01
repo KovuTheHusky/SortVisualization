@@ -35,35 +35,25 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 @SuppressWarnings("serial")
 public class Window extends JFrame implements ActionListener {
-
 	public static final int MODIFIER = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
-
+	private final AudioEngine ae = new AudioEngine();
 	private Number[] array = new Number[100];
-
-	private int maximum = 1000;
-
-	private boolean isStopping = false;
-	private boolean isStopped = true;
-
 	private Canvas canvas;
-	private AudioEngine ae = new AudioEngine();
-
+	private boolean isStopped = true;
+	private boolean isStopping = false;
+	private int maximum = 1000;
+	JMenuItem inc, dec, incVol, decVol;
 	ArrayList<JMenuItem> items = new ArrayList<JMenuItem>();
-	JMenuItem inc, dec;
 
 	public Window() throws HeadlessException {
 		super();
-
 		// Get new numbers
 		new Randomize(this).run();
-
 		int max = 0;
-		for (int i = 0; i < array.length; ++i) {
-			if (array[i].getValue() > max)
-				max = array[i].getValue();
-		}
+		for (Number element : array)
+			if (element.getValue() > max)
+				max = element.getValue();
 		maximum = max;
-
 		// Set up the window
 		SortVisualization.addWindow(this);
 		this.setIconImages(SortVisualization.getIconImages());
@@ -71,7 +61,6 @@ public class Window extends JFrame implements ActionListener {
 		int minimumWidth = 2 * array.length + 1;
 		this.setMinimumSize(new Dimension(minimumWidth, minimumWidth * 9 / 16));
 		this.setResizable(true);
-
 		// Set up the menu
 		JMenuItem jmi;
 		JMenuBar menu = new JMenuBar();
@@ -98,6 +87,12 @@ public class Window extends JFrame implements ActionListener {
 		edit.addSeparator();
 		edit.add(new ModifierMenuItem("Highlight Color...", this));
 		edit.addSeparator();
+		edit.add(jmi = new ModifierMenuItem("Increase Volume", this, KeyEvent.VK_UP));
+		incVol = jmi;
+		edit.add(jmi = new ModifierMenuItem("Decrease Volume", this, KeyEvent.VK_DOWN));
+		decVol = jmi;
+		edit.add(new ModifierMenuItem("Reset Volume", this));
+		edit.add(new ModifierMenuItem("Custom Volume...", this));
 		JCheckBoxMenuItem jcbmi = new JCheckBoxMenuItem("Mute Sounds");
 		jcbmi.addActionListener(this);
 		edit.add(jcbmi);
@@ -131,18 +126,15 @@ public class Window extends JFrame implements ActionListener {
 		help.add(new ModifierMenuItem("Version...", this));
 		menu.add(help);
 		this.setJMenuBar(menu);
-
 		// Add the canvas
-		this.canvas = new Canvas(this);
+		canvas = new Canvas(this);
 		Container pane = this.getContentPane();
 		pane.setLayout(new BorderLayout());
 		pane.add(canvas, BorderLayout.CENTER);
-
 		// Pack the window and show it
 		this.pack();
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);
-
 	}
 
 	public Window(GraphicsConfiguration gc) {
@@ -157,50 +149,8 @@ public class Window extends JFrame implements ActionListener {
 		throw new NotImplementedException();
 	}
 
-	public boolean isStopping() {
-		return this.isStopping;
-	}
-
-	public boolean isStopped() {
-		return this.isStopped;
-	}
-
-	public int getMaximum() {
-		return this.maximum;
-	}
-
-	public void start(final Runnable runnable) {
-		new Thread(new Runnable() {
-			public void run() {
-				isStopped = false;
-				for (JMenuItem jmi : items)
-					jmi.setEnabled(!jmi.isEnabled());
-				Thread thread;
-				(thread = new Thread(runnable)).start();
-				try {
-					thread.join();
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-				for (JMenuItem jmi : items)
-					jmi.setEnabled(!jmi.isEnabled());
-				isStopped = true;
-				isStopping = false;
-			}
-		}).start();
-	}
-
-	public Number[] getArray() {
-		return this.array;
-	}
-
-	public void setArray(Number[] array) {
-		this.array = array;
-	}
-
 	@Override
 	public void actionPerformed(ActionEvent e) {
-
 		switch (e.getActionCommand()) {
 			case "New Window":
 				new Window();
@@ -210,9 +160,8 @@ public class Window extends JFrame implements ActionListener {
 					isStopping = true;
 					SortVisualization.removeWindow(this);
 					this.dispose();
-				} else {
+				} else
 					System.exit(0);
-				}
 				break;
 			case "Exit":
 				System.exit(0);
@@ -229,7 +178,7 @@ public class Window extends JFrame implements ActionListener {
 					File temp = File.createTempFile("license", ".html");
 					temp.deleteOnExit();
 					FileWriter fw = new FileWriter(temp);
-					InputStream in = getClass().getClassLoader().getResourceAsStream("license.html");
+					InputStream in = this.getClass().getClassLoader().getResourceAsStream("license.html");
 					Scanner scanner = new Scanner(in);
 					while (scanner.hasNextLine())
 						fw.write(scanner.nextLine());
@@ -262,7 +211,7 @@ public class Window extends JFrame implements ActionListener {
 				dec.setEnabled(true);
 				break;
 			case "Custom Speed...":
-				int len2 = 0;
+				int len2 = -1;
 				while (len2 < 10 || len2 > 1000) {
 					String s = JOptionPane.showInputDialog(this, "How long should we pause for in milliseconds? (10-1000)");
 					if (s == null)
@@ -287,6 +236,44 @@ public class Window extends JFrame implements ActionListener {
 				if (c != null)
 					canvas.setColor(c);
 				break;
+			case "Increase Volume":
+				ae.setVolume(ae.getVolume() + 10);
+				if (ae.getVolume() >= 100)
+					incVol.setEnabled(false);
+				decVol.setEnabled(true);
+				break;
+			case "Decrease Volume":
+				ae.setVolume(ae.getVolume() - 10);
+				if (ae.getVolume() <= 0)
+					decVol.setEnabled(false);
+				incVol.setEnabled(true);
+				break;
+			case "Reset Volume":
+				ae.setVolume(50);
+				incVol.setEnabled(true);
+				decVol.setEnabled(true);
+				break;
+			case "Custom Volume...":
+				int len3 = -1;
+				while (len3 < 0 || len3 > 100) {
+					String s2 = JOptionPane.showInputDialog(this, "How loud should we play the sounds in percent? (0-100)");
+					if (s2 == null)
+						return;
+					else
+						len3 = Integer.parseInt(s2);
+				}
+				ae.setVolume(len3);
+				if (ae.getVolume() == 0) {
+					incVol.setEnabled(false);
+					decVol.setEnabled(true);
+				} else if (ae.getVolume() == 100) {
+					incVol.setEnabled(true);
+					decVol.setEnabled(false);
+				} else {
+					incVol.setEnabled(true);
+					decVol.setEnabled(true);
+				}
+				break;
 			case "Mute Sounds":
 				ae.setMuted(!ae.isMuted());
 				break;
@@ -297,13 +284,11 @@ public class Window extends JFrame implements ActionListener {
 				isStopping = true;
 				break;
 		}
-
 		if (!isStopped)
 			return;
-
 		switch (e.getActionCommand()) {
 			case "New":
-				start(new Randomize(this));
+				this.start(new Randomize(this));
 				break;
 			case "New...":
 				int len = 0;
@@ -315,7 +300,7 @@ public class Window extends JFrame implements ActionListener {
 						len = Integer.parseInt(s);
 				}
 				this.setArray(new Number[len]);
-				start(new Randomize(this));
+				this.start(new Randomize(this));
 				break;
 			case "Open...":
 				JFileChooser jfc = new JFileChooser();
@@ -328,42 +313,41 @@ public class Window extends JFrame implements ActionListener {
 					}
 					ArrayList<Number> nums = new ArrayList<Number>();
 					while (scanner.hasNextInt())
-						nums.add(new Number(scanner.nextInt(), this.ae));
+						nums.add(new Number(scanner.nextInt(), ae));
 					this.setArray(nums.toArray(new Number[nums.size()]));
 				}
 				break;
 			case "Save...":
 				JFileChooser jfc2 = new JFileChooser();
 				FileWriter fw = null;
-				if (jfc2.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
+				if (jfc2.showSaveDialog(this) == JFileChooser.APPROVE_OPTION)
 					try {
 						fw = new FileWriter(jfc2.getSelectedFile());
-						for (Number num : this.getArray()) {
+						for (Number num : this.getArray())
 							fw.write(num.getValue() + " ");
-						}
 						fw.close();
 					} catch (IOException e1) {
 						e1.printStackTrace();
 					}
-				}
 				break;
 			case "Selection Sort":
-				start(new SelectionSort(this));
+				this.start(new SelectionSort(this));
 				break;
 			case "Insertion Sort":
-				start(new InsertionSort(this));
+				this.start(new InsertionSort(this));
 				break;
 			case "Iterative Merge Sort":
-				start(new MergeSort(this));
+				this.start(new MergeSort(this));
 				break;
 			case "Recursive Merge Sort":
-				start(new RecursiveMergeSort(this));
+				this.start(new RecursiveMergeSort(this));
 				break;
 			case "Bogosort":
-				start(new BogoSort(this));
+				this.start(new BogoSort(this));
 				break;
 			case "Is Sorted?":
-				start(new Runnable() {
+				this.start(new Runnable() {
+					@Override
 					public void run() {
 						Number[] arr = array;
 						for (int i = 1; i < arr.length; ++i)
@@ -375,11 +359,51 @@ public class Window extends JFrame implements ActionListener {
 					}
 				});
 		}
+	}
 
+	public Number[] getArray() {
+		return array;
 	}
 
 	public AudioEngine getAudioEngine() {
 		return ae;
 	}
 
+	public int getMaximum() {
+		return maximum;
+	}
+
+	public boolean isStopped() {
+		return isStopped;
+	}
+
+	public boolean isStopping() {
+		return isStopping;
+	}
+
+	public void setArray(Number[] array) {
+		this.array = array;
+	}
+
+	public void start(final Runnable runnable) {
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				isStopped = false;
+				for (JMenuItem jmi : items)
+					jmi.setEnabled(!jmi.isEnabled());
+				Thread thread;
+				(thread = new Thread(runnable)).start();
+				try {
+					thread.join();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				for (JMenuItem jmi : items)
+					jmi.setEnabled(!jmi.isEnabled());
+				isStopped = true;
+				isStopping = false;
+			}
+		}).start();
+	}
 }

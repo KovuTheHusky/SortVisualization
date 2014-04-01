@@ -1,7 +1,6 @@
 package sortvisualization;
 
 public abstract class Sort implements Runnable {
-
 	protected Window window;
 	protected Number[] array;
 
@@ -33,5 +32,4 @@ public abstract class Sort implements Runnable {
 	protected boolean stop() {
 		return window.isStopping();
 	}
-
 }

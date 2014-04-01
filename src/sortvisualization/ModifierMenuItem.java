@@ -9,7 +9,6 @@ import javax.swing.KeyStroke;
 
 @SuppressWarnings("serial")
 public class ModifierMenuItem extends JMenuItem {
-
 	public ModifierMenuItem() {
 		super();
 	}
@@ -50,5 +49,4 @@ public class ModifierMenuItem extends JMenuItem {
 		this.setAccelerator(KeyStroke.getKeyStroke(key, Window.MODIFIER + mod));
 		this.addActionListener(listener);
 	}
-
 }

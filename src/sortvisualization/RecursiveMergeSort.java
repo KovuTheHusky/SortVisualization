@@ -1,9 +1,7 @@
 package sortvisualization;
 
 public class RecursiveMergeSort extends Sort {
-
 	// TODO: Rewrite this sort to be cleaner and easier to understand.
-
 	public RecursiveMergeSort(Window window) {
 		super(window);
 	}
@@ -42,5 +40,4 @@ public class RecursiveMergeSort extends Sort {
 			array[start - 1].dirty();
 		}
 	}
-
 }
