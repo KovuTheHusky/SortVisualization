@@ -1,22 +1,24 @@
-SortVisualization
-====================
+# SortVisualization
 
 Lets you watch and listen to sorting algorithms.
 
-About
---------------------
+## About
 
 To write your own sorting algorithm download the source, create a class that extends Sort and override the run method. Then add it to the sort JMenu and actionPerformed method in the Window class.
 
 In future versions it will be even easier to write and test your own sorting algorithms.
 
-Requirements
---------------------
+## Requirements
 
 Any operating system (tested on Windows and OS X) that has Java 7+ installed.
 
-License
---------------------
+## Links
+
+* Website: <http://codeski.com/#sortvisualization>
+* Issues: <http://github.com/Codeski/SortVisualization/issues>
+* Source: <http://github.com/Codeski/SortVisualization>
+
+## License
 
 Copyright © 2013 Kevin Breslin
 
