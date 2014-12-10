@@ -2,6 +2,8 @@ import org.apache.tools.ant.filters.*
 
 apply plugin: 'java'
 apply plugin: 'eclipse'
+/*apply plugin: 'launch4j'
+apply plugin: 'macAppBundle'*/
 
 group = 'com.codeski'
 version = '0.3.3-SNAPSHOT'
@@ -21,3 +23,25 @@ jar {
         'Main-Class': 'com.codeski.sortvisualization.SortVisualization'
   }
 }
+
+/*launch4j {
+  mainClassName = 'com.codeski.sortvisualization.SortVisualization'
+  icon = '../../src/main/resources/icon.ico'
+  jar = "lib/SortVisualization-" + project.version + ".jar"
+}
+
+macAppBundle {
+  mainClassName = 'com.codeski.sortvisualization.SortVisualization'
+  icon = 'src/main/resources/icon.icns'
+  javaProperties.put("apple.laf.useScreenMenuBar", "true")
+}
+
+buildscript {
+  repositories {
+    mavenCentral()
+  }
+  dependencies {
+    classpath 'edu.sc.seis.gradle:launch4j:1.0.6'
+    classpath 'edu.sc.seis.gradle:macappbundle:2.0.0'
+  }
+}*/
