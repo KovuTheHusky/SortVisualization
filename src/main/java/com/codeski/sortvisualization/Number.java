@@ -1,4 +1,4 @@
-package sortvisualization;
+package com.codeski.sortvisualization;
 
 public class Number implements Comparable<Number> {
 	private int value;

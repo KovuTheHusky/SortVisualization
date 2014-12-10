@@ -1,4 +1,4 @@
-package sortvisualization;
+package com.codeski.sortvisualization;
 
 import java.awt.Image;
 import java.util.ArrayList;
@@ -18,10 +18,13 @@ public class SortVisualization {
 		for (int i : sizes)
 			icons.add(new ImageIcon(SortVisualization.class.getClassLoader().getResource("icon" + i + ".png")).getImage());
 		if (System.getProperty("os.name").equals("Mac OS X")) {
-			com.apple.eawt.Application application = com.apple.eawt.Application.getApplication();
-			application.setDockIconImage(icons.get(0));
-			System.setProperty("com.apple.mrj.application.apple.menu.about.name", "SortVisualization");
-			System.setProperty("apple.laf.useScreenMenuBar", "true");
+			try {
+				// com.apple.eawt.Application.getApplication().setDockIconImage(icons.get(0));
+				System.setProperty("com.apple.mrj.application.apple.menu.about.name", "SortVisualization");
+				System.setProperty("apple.laf.useScreenMenuBar", "true");
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
 		}
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());

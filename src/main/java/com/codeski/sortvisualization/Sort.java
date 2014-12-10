@@ -1,4 +1,4 @@
-package sortvisualization;
+package com.codeski.sortvisualization;
 
 public abstract class Sort implements Runnable {
 	protected Window window;

@@ -1,0 +1,23 @@
+import org.apache.tools.ant.filters.*
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+
+group = 'com.codeski'
+version = '0.3.3-SNAPSHOT'
+sourceCompatibility = '1.7'
+targetCompatibility = '1.7'
+
+processResources {
+  filter ReplaceTokens, tokens: [
+    "version": project.property("version")
+  ]
+}
+
+jar {
+  manifest {
+    attributes 'Implementation-Title': 'SortVisualization',
+        'Implementation-Version': version,
+        'Main-Class': 'com.codeski.sortvisualization.SortVisualization'
+  }
+}

@@ -1,4 +1,4 @@
-package sortvisualization;
+package com.codeski.sortvisualization;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -168,7 +168,7 @@ public class Window extends JFrame implements ActionListener {
 				break;
 			case "About...":
 				try {
-					Desktop.getDesktop().browse(new URI("http://codeski.com/sortvisualization"));
+					Desktop.getDesktop().browse(new URI("http://codeski.com/#sortvisualization"));
 				} catch (IOException | URISyntaxException ex) {
 					ex.printStackTrace();
 				}

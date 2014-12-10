@@ -1,4 +1,4 @@
-package sortvisualization;
+package com.codeski.sortvisualization;
 
 public class MergeSort extends Sort {
 	// TODO: Rewrite this sort to be cleaner and easier to understand.

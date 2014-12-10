@@ -1,4 +1,4 @@
-package sortvisualization;
+package com.codeski.sortvisualization;
 
 import java.awt.Color;
 import java.awt.Dimension;
