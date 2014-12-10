@@ -17,6 +17,7 @@ Any operating system (tested on Windows and OS X) that has Java 7+ installed.
 * Website: <http://codeski.com/#sortvisualization>
 * Issues: <http://github.com/Codeski/SortVisualization/issues>
 * Source: <http://github.com/Codeski/SortVisualization>
+* Builds: <https://travis-ci.org/Codeski/SortVisualization>
 
 ## License
 
