@@ -1,4 +1,4 @@
-# SortVisualization
+# SortVisualization [![Build Status](https://travis-ci.org/Codeski/SortVisualization.svg?branch=master)](https://travis-ci.org/Codeski/SortVisualization)
 
 Lets you watch and listen to sorting algorithms.
 
