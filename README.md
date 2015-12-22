@@ -1,3 +1,5 @@
+![SortVisualization](http://codeski.com/img/sortvisualization2.png)
+
 # SortVisualization [![Build Status](https://travis-ci.org/Codeski/SortVisualization.svg?branch=master)](https://travis-ci.org/Codeski/SortVisualization)
 
 An application that lets you watch, listen to, and learn about computer sciences' complex sorting algorithms.
