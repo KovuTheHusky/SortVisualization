@@ -1,97 +1,97 @@
 package com.codeski.sortvisualization;
 
 public class Number implements Comparable<Number> {
-	private int value;
-	private boolean highlighted;
-	private boolean dirty;
-	private AudioEngine ae;
+    private final AudioEngine ae;
+    private boolean dirty;
+    private boolean highlighted;
+    private final int value;
 
-	public Number(int value, AudioEngine ae) {
-		this.value = value;
-		this.highlighted = false;
-		this.dirty = true;
-		this.ae = ae;
-	}
+    public Number(int value, AudioEngine ae) {
+        this.value = value;
+        highlighted = false;
+        dirty = true;
+        this.ae = ae;
+    }
 
-	@Override
-	public String toString() {
-		return this.value + "";
-	}
+    @Override
+    public int compareTo(Number that) {
+        this.highlighted();
+        that.highlighted();
+        ae.play(this, that);
+        return value - that.value;
+    }
 
-	@Override
-	public int compareTo(Number that) {
-		this.highlighted();
-		that.highlighted();
-		ae.play(this, that);
-		return this.value - that.value;
-	}
+    public int compareToInt(int num) {
+        Number that = new Number(num, ae);
+        return this.compareTo(that);
+    }
 
-	public boolean equals(Number that) {
-		return this.compareTo(that) == 0;
-	}
+    public void dirty() {
+        dirty = true;
+    }
 
-	public boolean lt(Number that) {
-		return this.compareTo(that) < 0;
-	}
+    public boolean equals(int that) {
+        return this.compareToInt(that) == 0;
+    }
 
-	public boolean gt(Number that) {
-		return this.compareTo(that) > 0;
-	}
+    public boolean equals(Number that) {
+        return this.compareTo(that) == 0;
+    }
 
-	public boolean lte(Number that) {
-		return this.compareTo(that) <= 0;
-	}
+    public int getValue() {
+        return value;
+    }
 
-	public boolean gte(Number that) {
-		return this.compareTo(that) >= 0;
-	}
+    public boolean gt(int that) {
+        return this.compareToInt(that) > 0;
+    }
 
-	public int compareToInt(int num) {
-		Number that = new Number(num, ae);
-		return this.compareTo(that);
-	}
+    public boolean gt(Number that) {
+        return this.compareTo(that) > 0;
+    }
 
-	public boolean equals(int that) {
-		return this.compareToInt(that) == 0;
-	}
+    public boolean gte(int that) {
+        return this.compareToInt(that) >= 0;
+    }
 
-	public boolean lt(int that) {
-		return this.compareToInt(that) < 0;
-	}
+    public boolean gte(Number that) {
+        return this.compareTo(that) >= 0;
+    }
 
-	public boolean gt(int that) {
-		return this.compareToInt(that) > 0;
-	}
+    public void highlighted() {
+        highlighted = true;
+    }
 
-	public boolean lte(int that) {
-		return this.compareToInt(that) <= 0;
-	}
+    public boolean isDirty() {
+        boolean ret = dirty;
+        dirty = false;
+        return ret;
+    }
 
-	public boolean gte(int that) {
-		return this.compareToInt(that) >= 0;
-	}
+    public boolean isHighlighted() {
+        boolean ret = highlighted;
+        highlighted = false;
+        return ret;
+    }
 
-	public int getValue() {
-		return this.value;
-	}
+    public boolean lt(int that) {
+        return this.compareToInt(that) < 0;
+    }
 
-	public void highlighted() {
-		this.highlighted = true;
-	}
+    public boolean lt(Number that) {
+        return this.compareTo(that) < 0;
+    }
 
-	public boolean isHighlighted() {
-		boolean ret = this.highlighted;
-		this.highlighted = false;
-		return ret;
-	}
+    public boolean lte(int that) {
+        return this.compareToInt(that) <= 0;
+    }
 
-	public void dirty() {
-		this.dirty = true;
-	}
+    public boolean lte(Number that) {
+        return this.compareTo(that) <= 0;
+    }
 
-	public boolean isDirty() {
-		boolean ret = this.dirty;
-		this.dirty = false;
-		return ret;
-	}
+    @Override
+    public String toString() {
+        return value + "";
+    }
 }
