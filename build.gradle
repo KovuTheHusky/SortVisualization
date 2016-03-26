@@ -52,3 +52,5 @@ macAppBundle {
   icon = 'src/main/resources/icon.icns'
   javaProperties.put("apple.laf.useScreenMenuBar", "true")
 }
+
+jar.finalizedBy(launch4j.launch4jCmd)
