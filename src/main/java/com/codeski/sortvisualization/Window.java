@@ -6,8 +6,6 @@ import java.awt.Container;
 import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.Event;
-import java.awt.GraphicsConfiguration;
-import java.awt.HeadlessException;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -36,14 +34,14 @@ public class Window extends JFrame implements ActionListener {
     public static final int MODIFIER = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
     private final AudioEngine ae = new AudioEngine();
     private Number[] array = new Number[100];
-    private Canvas canvas;
+    private final Canvas canvas;
     private boolean isStopped = true;
     private boolean isStopping = false;
     private int maximum = 1000;
     JMenuItem inc, dec, incVol, decVol;
     ArrayList<JMenuItem> items = new ArrayList<JMenuItem>();
 
-    public Window() throws HeadlessException {
+    public Window() {
         super();
         // Get new numbers
         new Randomize(this).run();
@@ -133,18 +131,6 @@ public class Window extends JFrame implements ActionListener {
         this.pack();
         this.setLocationRelativeTo(null);
         this.setVisible(true);
-    }
-
-    public Window(GraphicsConfiguration gc) throws Exception {
-        throw new Exception();
-    }
-
-    public Window(String title) throws Exception {
-        throw new Exception();
-    }
-
-    public Window(String title, GraphicsConfiguration gc) throws Exception {
-        throw new Exception();
     }
 
     @Override

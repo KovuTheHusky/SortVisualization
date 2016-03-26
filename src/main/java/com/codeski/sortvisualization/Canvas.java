@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
-import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -19,25 +18,9 @@ public class Canvas extends JPanel implements ActionListener {
     private final ArrayList<Integer> highlighted = new ArrayList<Integer>();
     private int lastFps;
     private long lastFpsOut;
-    private Timer timer;
+    private final Timer timer;
     private final ArrayList<Integer> toHighlight = new ArrayList<Integer>();
-    private Window window;
-
-    public Canvas() throws Exception {
-        throw new Exception();
-    }
-
-    public Canvas(boolean isDoubleBuffered) throws Exception {
-        throw new Exception();
-    }
-
-    public Canvas(LayoutManager layout) throws Exception {
-        throw new Exception();
-    }
-
-    public Canvas(LayoutManager layout, boolean isDoubleBuffered) throws Exception {
-        throw new Exception();
-    }
+    private final Window window;
 
     public Canvas(Window window) {
         super();
