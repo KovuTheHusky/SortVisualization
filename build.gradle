@@ -2,18 +2,25 @@ import org.apache.tools.ant.filters.*
 
 apply plugin: 'java'
 apply plugin: 'eclipse'
-/*apply plugin: 'launch4j'
-apply plugin: 'macAppBundle'*/
+apply plugin: 'edu.sc.seis.launch4j'
+apply plugin: 'edu.sc.seis.macAppBundle'
 
 group = 'com.codeski'
 version = '0.3.3-SNAPSHOT'
 sourceCompatibility = '1.7'
 
-processResources {
+task filter(type: Copy) {
+  from 'src/main/java'
+  into 'build/sources'
   filter ReplaceTokens, tokens: [
-    "version": project.property("version")
+    version: project.version
   ]
 }
+
+compileJava {
+  source = 'build/sources'
+}
+compileJava.dependsOn filter
 
 jar {
   manifest {
@@ -23,7 +30,18 @@ jar {
   }
 }
 
-/*launch4j {
+buildscript {
+  repositories {
+    mavenCentral()
+    maven { url 'https://plugins.gradle.org/m2/' }
+  }
+  dependencies {
+    classpath 'gradle.plugin.edu.sc.seis.gradle:launch4j:1.6.1'
+    classpath 'gradle.plugin.edu.sc.seis:macAppBundle:2.1.5'
+  }
+}
+
+launch4j {
   mainClassName = 'com.codeski.sortvisualization.SortVisualization'
   icon = '../../src/main/resources/icon.ico'
   jar = "lib/SortVisualization-" + project.version + ".jar"
@@ -34,13 +52,3 @@ macAppBundle {
   icon = 'src/main/resources/icon.icns'
   javaProperties.put("apple.laf.useScreenMenuBar", "true")
 }
-
-buildscript {
-  repositories {
-    mavenCentral()
-  }
-  dependencies {
-    classpath 'edu.sc.seis.gradle:launch4j:1.0.6'
-    classpath 'edu.sc.seis.gradle:macappbundle:2.0.0'
-  }
-}*/

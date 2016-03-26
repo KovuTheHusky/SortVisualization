@@ -35,8 +35,6 @@ public class SortVisualization {
             icons.add(new ImageIcon(SortVisualization.class.getClassLoader().getResource("icon" + i + ".png")).getImage());
         if (System.getProperty("os.name").equals("Mac OS X"))
             try {
-                // com.apple.eawt.Application.getApplication().setDockIconImage(icons.get(0));
-                System.setProperty("com.apple.mrj.application.apple.menu.about.name", "SortVisualization");
                 System.setProperty("apple.laf.useScreenMenuBar", "true");
             } catch (Exception ex) {
                 ex.printStackTrace();
