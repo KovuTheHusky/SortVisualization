@@ -6,7 +6,7 @@ apply plugin: 'edu.sc.seis.launch4j'
 apply plugin: 'edu.sc.seis.macAppBundle'
 
 group = 'com.codeski'
-version = '0.5.0'
+version = '0.5.1-SNAPSHOT'
 sourceCompatibility = '1.7'
 
 task filter(type: Copy) {
