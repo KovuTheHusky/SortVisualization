@@ -3,7 +3,8 @@ jdk:
   - oraclejdk7
 deploy:
   provider: releases
-  api-key: "8638657fcd2e4e9d3ad9e4173733d41b8e74d1c5"
+  api_key:
+    secure: "s5KgpmtuM1YR/JdnxkbVDZGSSZT1EzcLd/LiwpeyxlGOSiyakYadfMWddC0avZR0FGDDZoyB3cOBLBy+tV0Sd2vVlGoX4EzZeqRJtm81qSS62ThSJNf96goZSD6C/9nyujwOk7+AzekqkcDpxmTdV26K0q4eqo2jd967roeiMjA="
   file-glob: true
   file:
     - "build/launch4j/SortVisualization.exe"
