@@ -10,7 +10,7 @@ plugins {
 
 group = 'com.codeski'
 version = '0.5.2-SNAPSHOT'
-sourceCompatibility = '1.7'
+sourceCompatibility = '1.8'
 
 task filter(type: Copy) {
   from 'src/main/java'
