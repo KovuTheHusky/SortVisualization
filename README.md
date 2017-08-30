@@ -1,8 +1,8 @@
-# SortVisualization [![Build Status](https://travis-ci.org/Codeski/SortVisualization.svg?branch=master)](https://travis-ci.org/Codeski/SortVisualization)
+# SortVisualization [![Build Status](https://travis-ci.org/KovuTheHusky/SortVisualization.svg?branch=master)](https://travis-ci.org/KovuTheHusky/SortVisualization)
 
 An application that lets you watch, listen to, and learn about computer sciences' complex sorting algorithms.
 
-![SortVisualization](http://codeski.com/img/sortvisualization2.png)
+![SortVisualization](https://kovuthehusky.com/assets/sortvisualization2.png)
 
 ## Features
 
@@ -16,7 +16,7 @@ Any operating system (tested on Windows and OS X) that has Java 7+ installed.
 
 ## Links
 
-* Website: <http://codeski.com/#sortvisualization>
-* Issues: <https://github.com/Codeski/SortVisualization/issues>
-* Source: <https://github.com/Codeski/SortVisualization>
-* Builds: <https://travis-ci.org/Codeski/SortVisualization>
+* Website: <https://kovuthehusky.com/projects#sortvisualization>
+* Issues: <https://github.com/KovuTheHusky/SortVisualization/issues>
+* Source: <https://github.com/KovuTheHusky/SortVisualization>
+* Builds: <https://travis-ci.org/KovuTheHusky/SortVisualization>
