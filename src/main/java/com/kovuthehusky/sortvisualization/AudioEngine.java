@@ -1,4 +1,4 @@
-package com.codeski.sortvisualization;
+package com.kovuthehusky.sortvisualization;
 
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioSystem;
@@ -27,7 +27,7 @@ public final class AudioEngine {
 
     public int getLength() {
         return length;
-    } 
+    }
 
     public float getVolume() {
         return volume;

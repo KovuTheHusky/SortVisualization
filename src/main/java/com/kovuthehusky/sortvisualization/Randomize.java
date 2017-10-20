@@ -1,4 +1,4 @@
-package com.codeski.sortvisualization;
+package com.kovuthehusky.sortvisualization;
 
 import java.util.Random;
 

@@ -1,4 +1,4 @@
-package com.codeski.sortvisualization;
+package com.kovuthehusky.sortvisualization;
 
 public class Number implements Comparable<Number> {
     private final AudioEngine ae;

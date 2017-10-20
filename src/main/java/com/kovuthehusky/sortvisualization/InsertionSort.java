@@ -1,4 +1,4 @@
-package com.codeski.sortvisualization;
+package com.kovuthehusky.sortvisualization;
 
 public class InsertionSort extends Sort {
     public InsertionSort(Window window) {

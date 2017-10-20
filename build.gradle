@@ -8,7 +8,7 @@ plugins {
   id 'edu.sc.seis.macAppBundle' version '2.1.7'
 }
 
-group = 'com.codeski'
+group = 'com.kovuthehusky'
 version = '0.5.2-SNAPSHOT'
 sourceCompatibility = '1.8'
 
@@ -29,18 +29,18 @@ jar {
   manifest {
     attributes 'Implementation-Title': 'SortVisualization',
         'Implementation-Version': version,
-        'Main-Class': 'com.codeski.sortvisualization.SortVisualization'
+        'Main-Class': 'com.kovuthehusky.sortvisualization.SortVisualization'
   }
 }
 
 launch4j {
-  mainClassName = 'com.codeski.sortvisualization.SortVisualization'
+  mainClassName = 'com.kovuthehusky.sortvisualization.SortVisualization'
   icon = '../../src/main/resources/icon.ico'
   jar = "lib/SortVisualization-" + project.version + ".jar"
 }
 
 macAppBundle {
-  mainClassName = 'com.codeski.sortvisualization.SortVisualization'
+  mainClassName = 'com.kovuthehusky.sortvisualization.SortVisualization'
   icon = 'src/main/resources/icon.icns'
   javaProperties.put("apple.laf.useScreenMenuBar", "true")
 }

@@ -1,4 +1,4 @@
-package com.codeski.sortvisualization;
+package com.kovuthehusky.sortvisualization;
 
 public class SelectionSort extends Sort {
     public SelectionSort(Window window) {

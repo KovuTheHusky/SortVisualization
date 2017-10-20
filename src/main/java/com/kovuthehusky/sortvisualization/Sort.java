@@ -1,4 +1,4 @@
-package com.codeski.sortvisualization;
+package com.kovuthehusky.sortvisualization;
 
 public abstract class Sort implements Runnable {
     protected Number[] array;

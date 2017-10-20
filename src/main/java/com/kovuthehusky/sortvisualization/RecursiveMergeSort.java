@@ -1,4 +1,4 @@
-package com.codeski.sortvisualization;
+package com.kovuthehusky.sortvisualization;
 
 public class RecursiveMergeSort extends Sort {
     // TODO: Rewrite this sort to be cleaner and easier to understand.
