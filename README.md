@@ -1,4 +1,4 @@
-# SortVisualization [![Build Status](https://travis-ci.org/KovuTheHusky/SortVisualization.svg?branch=master)](https://travis-ci.org/KovuTheHusky/SortVisualization)
+# SortVisualization [![Project Status: Suspended – Initial development has started, but there has not yet been a stable, usable release; work has been stopped for the time being but the author(s) intend on resuming work.](https://www.repostatus.org/badges/latest/suspended.svg)](https://www.repostatus.org/#suspended) [![Build Status](https://travis-ci.org/KovuTheHusky/SortVisualization.svg?branch=master)](https://travis-ci.org/KovuTheHusky/SortVisualization)
 
 An application that lets you watch, listen to, and learn about computer sciences' complex sorting algorithms.
 
