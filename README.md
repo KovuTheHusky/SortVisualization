@@ -19,4 +19,4 @@ Any operating system (tested on Windows and OS X) that has Java 7+ installed.
 * Website: <https://kovuthehusky.com/projects#sortvisualization>
 * Issues: <https://github.com/KovuTheHusky/SortVisualization/issues>
 * Source: <https://github.com/KovuTheHusky/SortVisualization>
-* Builds: <https://travis-ci.org/KovuTheHusky/SortVisualization>
+* Builds: <https://travis-ci.com/KovuTheHusky/SortVisualization>
