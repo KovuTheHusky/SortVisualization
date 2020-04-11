@@ -12,7 +12,7 @@ In future versions it will be even easier to write and test your own sorting alg
 
 ## Dependencies
 
-Any operating system (tested on Windows and OS X) that has Java 7+ installed.
+Any operating system (tested on macOS and Windows) that has Java 8+ installed.
 
 ## Links
 
