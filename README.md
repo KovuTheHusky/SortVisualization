@@ -2,7 +2,7 @@
 
 An application that lets you watch, listen to, and learn about computer sciences' complex sorting algorithms.
 
-![SortVisualization](https://kovuthehusky.com/images/sortvisualization2.png)
+![SortVisualization](https://kovuthehusky.com/videos/sortvisualization.gif)
 
 ## Features
 
