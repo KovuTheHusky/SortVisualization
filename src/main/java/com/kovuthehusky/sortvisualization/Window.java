@@ -97,7 +97,7 @@ public class Window extends JFrame implements ActionListener {
         edit.add(jcbmi);
         menu.add(edit);
         JMenu sort = new JMenu("Sort");
-        sort.add(jmi = new ModifierMenuItem("Selection Sort", this, KeyEvent.VK_S));
+        sort.add(jmi = new ModifierMenuItem("Selection Sort", this, KeyEvent.VK_S, Event.SHIFT_MASK));
         items.add(jmi);
         sort.add(jmi = new ModifierMenuItem("Insertion Sort", this, KeyEvent.VK_I));
         items.add(jmi);
