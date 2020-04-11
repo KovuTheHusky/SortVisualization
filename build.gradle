@@ -38,6 +38,7 @@ launch4j {
   icon = '../../src/main/resources/icon.ico'
   jar = "lib/SortVisualization-" + project.version + ".jar"
 }
+assemble.finalizedBy(createExe)
 
 macAppBundle {
   mainClassName = 'com.kovuthehusky.sortvisualization.SortVisualization'
