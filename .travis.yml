@@ -12,7 +12,7 @@ deploy:
     - build/libs/SortVisualization-*.jar
     - build/libs/SortVisualization.mac.zip
     - build/libs/SortVisualization.win.zip
-  cleanup: false
+  skip_cleanup: true
   on:
     tags: true
     all_branches: true
