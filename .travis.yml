@@ -2,8 +2,8 @@ language: java
 jdk:
   - oraclejdk11
 before_deploy:
-  - zip build/libs/SortVisualization.win.zip build/launch4j/SortVisualization.exe
-  - zip build/libs/SortVisualization.mac.zip build/macApp/SortVisualization.app
+  - zip -j build/libs/SortVisualization.win.zip build/launch4j/SortVisualization.exe
+  - zip -j build/libs/SortVisualization.mac.zip build/macApp/SortVisualization.app
 deploy:
   provider: releases
   token: ${GITHUB_TOKEN}
