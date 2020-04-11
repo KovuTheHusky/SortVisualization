@@ -152,24 +152,15 @@ public class Window extends JFrame implements ActionListener {
                 break;
             case "About...":
                 try {
-                    Desktop.getDesktop().browse(new URI("https://kovuthehusky.com/projects#sortvisualization"));
+                    Desktop.getDesktop().browse(new URI("https://github.com/KovuTheHusky/SortVisualization/blob/master/README.md"));
                 } catch (IOException | URISyntaxException ex) {
                     ex.printStackTrace();
                 }
                 break;
             case "License...":
                 try {
-                    File temp = File.createTempFile("license", ".html");
-                    temp.deleteOnExit();
-                    FileWriter fw = new FileWriter(temp);
-                    InputStream in = this.getClass().getClassLoader().getResourceAsStream("license.html");
-                    Scanner scanner = new Scanner(in);
-                    while (scanner.hasNextLine())
-                        fw.write(scanner.nextLine());
-                    scanner.close();
-                    fw.close();
-                    Desktop.getDesktop().browse(temp.toURI());
-                } catch (IOException ex) {
+                    Desktop.getDesktop().browse(new URI("https://github.com/KovuTheHusky/SortVisualization/blob/master/LICENSE"));
+                } catch (IOException | URISyntaxException ex) {
                     ex.printStackTrace();
                 }
                 break;
