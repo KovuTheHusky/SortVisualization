@@ -3,12 +3,10 @@ jdk:
   - oraclejdk11
 deploy:
   provider: releases
-  api_key:
-    secure: "s5KgpmtuM1YR/JdnxkbVDZGSSZT1EzcLd/LiwpeyxlGOSiyakYadfMWddC0avZR0FGDDZoyB3cOBLBy+tV0Sd2vVlGoX4EzZeqRJtm81qSS62ThSJNf96goZSD6C/9nyujwOk7+AzekqkcDpxmTdV26K0q4eqo2jd967roeiMjA="
+  token: ${GITHUB_TOKEN}
   file_glob: true
   file: "build/libs/SortVisualization-*.jar"
-  skip_cleanup: true
+  cleanup: false
   on:
     tags: true
     all_branches: true
-sudo: false
