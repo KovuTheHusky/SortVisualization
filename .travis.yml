@@ -5,7 +5,7 @@ before_deploy:
   - cd build/macApp
   - zip -r SortVisualization.mac.zip SortVisualization.app
   - cd ../../build/launch4j
-  - zip -j SortVisualization.win.zip SortVisualization.exe
+  - zip SortVisualization.win.zip SortVisualization.exe
   - cd ../..
 deploy:
   provider: releases
