@@ -2,7 +2,7 @@
 
 An application that lets you watch, listen to, and learn about computer sciences' complex sorting algorithms.
 
-![SortVisualization](preview.gif)
+[![](preview.gif)](#)
 
 ## Features
 
