@@ -16,7 +16,6 @@ Any operating system (tested on macOS and Windows) that has Java 8+ installed.
 
 ## Links
 
-* Website: <https://kovuthehusky.com/projects#sortvisualization>
 * Issues: <https://github.com/KovuTheHusky/SortVisualization/issues>
 * Source: <https://github.com/KovuTheHusky/SortVisualization>
 * Builds: <https://travis-ci.com/KovuTheHusky/SortVisualization>
