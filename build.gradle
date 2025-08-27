@@ -4,7 +4,7 @@ plugins {
   id 'java'
   id 'eclipse'
   id 'idea'
-  id 'edu.sc.seis.launch4j' version '3.0.7'
+  id 'edu.sc.seis.launch4j' version '4.0.0'
   id 'edu.sc.seis.macAppBundle' version '2.3.1'
 }
 
