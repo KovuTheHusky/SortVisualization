@@ -1,4 +1,4 @@
-# SortVisualization [![Project Status: Suspended – Initial development has started, but there has not yet been a stable, usable release; work has been stopped for the time being but the author(s) intend on resuming work.](https://www.repostatus.org/badges/latest/suspended.svg)](https://www.repostatus.org/#suspended) [![Build Status](https://travis-ci.com/KovuTheHusky/SortVisualization.svg?branch=master)](https://travis-ci.com/KovuTheHusky/SortVisualization)
+# SortVisualization [![Project Status: Abandoned – Initial development has started, but there has not yet been a stable, usable release; the project has been abandoned and the author(s) do not intend on continuing development.](https://www.repostatus.org/badges/latest/abandoned.svg)](https://www.repostatus.org/#abandoned)
 
 An application that lets you watch, listen to, and learn about computer sciences' complex sorting algorithms.
 
@@ -18,4 +18,3 @@ Any operating system (tested on macOS and Windows) that has Java 8+ installed.
 
 * Issues: <https://github.com/KovuTheHusky/SortVisualization/issues>
 * Source: <https://github.com/KovuTheHusky/SortVisualization>
-* Builds: <https://travis-ci.com/KovuTheHusky/SortVisualization>
